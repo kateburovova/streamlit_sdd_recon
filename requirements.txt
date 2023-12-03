@@ -4,3 +4,5 @@ datetime
 numpy
 pytz
 streamlit
+gspread
+google
