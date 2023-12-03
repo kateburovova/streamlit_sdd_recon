@@ -43,8 +43,8 @@ creds = {
 
 # processing fin data
 
-df_finance_sdd = fin_processing.get_df_from_google_spreadsheet(fin_sdd_url, creds, 'daily odessa')
-df_finance_sdd = fin_processing.format_fin_data(df_finance_sdd)
+df_finance_sdd_loaded = fin_processing.get_df_from_google_spreadsheet(fin_sdd_url, creds, 'daily odessa')
+df_finance_sdd = fin_processing.format_fin_data(df_finance_sdd_loaded)
 st.dataframe(df_finance_sdd.tail(5))
 
 # loading and processing WH data
