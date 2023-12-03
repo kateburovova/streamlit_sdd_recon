@@ -6,3 +6,4 @@ pytz
 streamlit
 gspread
 google
+google-auth
