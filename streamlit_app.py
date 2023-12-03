@@ -39,11 +39,11 @@ creds = {
     'universe_domain': st.secrets['google']["universe_domain"]
 }
 
-# st.write(creds)
+#processing fin data
 
-df = fin_processing.get_df_from_google_spreadsheet(fin_sdd_url, creds, 'daily odessa')
-
-st.write(len(df))
+df_finance_sdd = fin_processing.get_df_from_google_spreadsheet(fin_sdd_url, creds, 'daily odessa')
+df_finance_sdd = fin_processing.format_fin_data(df_finance_sdd)
+st.dataframe(df_finance_sdd)
 
 # default
 _WH_needed = False
