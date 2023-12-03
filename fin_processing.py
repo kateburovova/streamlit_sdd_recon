@@ -47,24 +47,24 @@ def get_df_from_google_spreadsheet(url, creds, sheet_name):
   df.reset_index(inplace=True, drop=True)
 
   return df
-def format_fin_data(df_finance_sdd):
+def format_fin_data(df):
 
   # drop extra columns and empty rows
-  df_finance_sdd.drop(columns = ['порезка', ''], inplace=True)
+  df.drop(columns = ['порезка', ''], inplace=True)
   columns_to_check = ["Расход или доход", "Какая касса?", "Статья затрат", "Сумма (только цифры с разделителем - точкой)"]
-  mask = (df_finance_sdd[columns_to_check] == '').all(axis=1)
-  df_finance_sdd = df_finance_sdd[~mask].copy()
+  mask = (df[columns_to_check] == '').all(axis=1)
+  df = df[~mask].copy()
 
   # extract order numbers from the text
-  df_finance_sdd['clean_order_number'] = df_finance_sdd['Номер замовлення'].str.extract(r'(\d+)')
-  df_finance_sdd['Сумма'] = pd.to_numeric(df_finance_sdd['Сумма (только цифры с разделителем - точкой)'], errors='coerce')
+  df['clean_order_number'] = df['Номер замовлення'].str.extract(r'(\d+)')
+  df['Сумма'] = pd.to_numeric(df['Сумма (только цифры с разделителем - точкой)'], errors='coerce')
 
   # clean dates
-  df_finance_sdd['datetime'] = pd.to_datetime(df_finance_sdd['дата'], dayfirst=True)
-  df_finance_sdd['date'] = df_finance_sdd['datetime'].dt.date
+  df['datetime'] = pd.to_datetime(df['дата'], dayfirst=True)
+  df['date'] = df['datetime'].dt.date
 
   # cast sums to numeric
-  df_finance_sdd['Сумма (только цифры с разделителем - точкой)'] = pd.to_numeric(df_finance_sdd['Сумма (только цифры с разделителем - точкой)'], errors='coerce')
-  df_finance_sdd['formatted_sum'] = df_finance_sdd.apply(lambda row: row['Сумма (только цифры с разделителем - точкой)']*(-1) if row['Расход или доход']=='минус' else row['Сумма'], axis=1)
+  df['Сумма (только цифры с разделителем - точкой)'] = pd.to_numeric(df['Сумма (только цифры с разделителем - точкой)'], errors='coerce')
+  df['formatted_sum'] = df.apply(lambda row: row['Сумма (только цифры с разделителем - точкой)']*(-1) if row['Расход или доход']=='минус' else row['Сумма'], axis=1)
 
-  return df_finance_sdd
+  return df
