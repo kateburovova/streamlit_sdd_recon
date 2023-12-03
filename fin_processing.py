@@ -10,7 +10,7 @@ from google.oauth2.service_account import Credentials
 import gspread
 
 
-@st.cache
+# @st.cache
 def get_df_from_google_spreadsheet(url, creds, sheet_name):
   """
   Extracts and returns a flattened list of unique values from a DataFrame column that contains lists.
@@ -48,7 +48,7 @@ def get_df_from_google_spreadsheet(url, creds, sheet_name):
 
   return df
 
-@st.cache
+# @st.cache
 def format_fin_data(df):
 
   # drop extra columns and empty rows
