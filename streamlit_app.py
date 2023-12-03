@@ -50,9 +50,10 @@ st.dataframe(df_finance_sdd.tail(5))
 # loading and processing WH data
 
 # Title of the app
+
+df_WH = None
 if st.button('Process CSV'):
     st.markdown('CSV File Upload and Validation')
-    df_WH = None
 
     uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
     df_WH = WH_processing.process_csv_upload(uploaded_file)
