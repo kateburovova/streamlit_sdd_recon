@@ -64,7 +64,7 @@ def process_csv_upload(uploaded_file):
     Parameters:
     uploaded_file: The uploaded file object from Streamlit's file_uploader.
     """
-
+    df = None
     def validate_csv(df):
         """
         Validate the format of the CSV file.
