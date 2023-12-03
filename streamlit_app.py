@@ -19,3 +19,12 @@ st.write("Обрано:", start_date)
 end_date = st.date_input("Оберіть дату кінця періоду", datetime.today())
 st.write("Обрано:", end_date)
 
+st.write("crm api url len", len(st.secrets['crm']['cred_api_url']))
+st.write("crm api key len", len(st.secrets['crm']['cred_crm_api_key']))
+st.write("url fin len", len(st.secrets["google"]["fin_sdd_url"]))
+
+# default
+_WH_needed = False
+
+
+
