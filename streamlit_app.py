@@ -52,15 +52,15 @@ st.dataframe(df_finance_sdd.tail(5))
 # Title of the app
 
 df_WH = None
-if st.button('Process CSV'):
-    st.markdown('CSV File Upload and Validation')
+# if st.button('Process CSV'):
+st.markdown('CSV File Upload and Validation')
 
-    uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
-    df_WH = WH_processing.process_csv_upload(uploaded_file)
+uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
+df_WH = WH_processing.process_csv_upload(uploaded_file)
 
-    if df_WH is not None:
-        _WH_needed = True
-        df_WH, df_WH_sold_sdd, aggregated_WH_by_day = WH_processing.process_WH_data(_WH_needed, df_WH)
-        st.dataframe(df_WH)
+if df_WH is not None:
+    _WH_needed = True
+    df_WH, df_WH_sold_sdd, aggregated_WH_by_day = WH_processing.process_WH_data(_WH_needed, df_WH)
+    st.dataframe(df_WH)
 
 
