@@ -47,6 +47,8 @@ def get_df_from_google_spreadsheet(url, creds, sheet_name):
   df.reset_index(inplace=True, drop=True)
 
   return df
+
+@st.cache
 def format_fin_data(df):
 
   # drop extra columns and empty rows
