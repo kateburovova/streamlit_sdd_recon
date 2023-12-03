@@ -11,7 +11,9 @@ from dicts import status_WH_dict
 
 def process_WH_data(_WH_needed, df_WH, status_WH_dict = status_WH_dict):
   if _WH_needed:
-    df_WH.drop(columns=[' ', 'УУ', 'БУ', 'НУ', 'Валюта', 'Сделка', 'Ответственный', 'Организация', 'Вид операции', 'Вид передачи'], inplace=True)
+    cols_to_drop=[' ', 'УУ', 'БУ', 'НУ', 'Валюта', 'Сделка', 'Ответственный', 'Организация', 'Вид операции', 'Вид передачи']
+    df_WH = df_WH.drop(columns=[col for col in cols_to_drop if col in df_WH.columns])
+
     df_WH=df_WH[df_WH['Сумма']!='nan'].copy()
     df_WH['Код CRM'] = df_WH['Код CRM'].astype(str).str.replace('\\xa0', '', regex=False)
     df_WH['Код CRM'] = df_WH['Код CRM'].astype(str).str.replace('\xa0', '', regex=False)
@@ -27,7 +29,6 @@ def process_WH_data(_WH_needed, df_WH, status_WH_dict = status_WH_dict):
     df_WH['Проведен?'] = df_WH['Статус заказа'].map(status_mapping)
 
     df_WH_sold_sdd = df_WH[(df_WH['Проведен?']==True)&(df_WH['Подразделение']=='Slash Dot Dash')].copy()
-
 
     aggregated_WH_by_day = df_WH_sold_sdd.groupby('Date').agg({
     'Сумма':'sum',
