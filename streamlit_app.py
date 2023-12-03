@@ -52,13 +52,14 @@ st.dataframe(df_finance_sdd.tail(5))
 # Title of the app
 st.markdown('CSV File Upload and Validation')
 df_WH = None
-uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
-df_WH = WH_processing.process_csv_upload(uploaded_file)
 
-if df_WH is not None:
-    _WH_needed = True
-    df_WH, df_WH_sold_sdd, aggregated_WH_by_day = WH_processing.process_WH_data(_WH_needed, df_WH)
+if st.button('Підвантажити дані з обліку товарів'):
+    uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
+    df_WH = WH_processing.process_csv_upload(uploaded_file)
 
-st.dataframe(df_WH)
+    if df_WH is not None:
+        _WH_needed = True
+        df_WH, df_WH_sold_sdd, aggregated_WH_by_day = WH_processing.process_WH_data(_WH_needed, df_WH)
+        st.dataframe(df_WH)
 
 
