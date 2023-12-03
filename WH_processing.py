@@ -56,7 +56,7 @@ def process_WH_data(_WH_needed, df_WH, status_WH_dict = status_WH_dict):
 import streamlit as st
 import pandas as pd
 
-
+@st.cache
 def process_csv_upload(uploaded_file):
     """
     Process the uploaded CSV file: Read, validate, and display it.
