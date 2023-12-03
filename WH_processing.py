@@ -54,10 +54,7 @@ def process_WH_data(_WH_needed, df_WH, status_WH_dict = status_WH_dict):
 
 # Function to validate the CSV format
 
-import streamlit as st
-import pandas as pd
-
-@st.cache(suppress_st_warning=True)
+# @st.cache(suppress_st_warning=True)
 def process_csv_upload(uploaded_file):
     """
     Process the uploaded CSV file: Read, validate, and display it.
