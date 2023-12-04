@@ -8,6 +8,10 @@ import numpy as np
 import pytz
 
 from dicts import status_WH_dict
+@st.cache
+def load_file(uploaded_file):
+    df = pd.read_csv(uploaded_file)
+    return df
 
 def process_WH_data(_WH_needed, df_WH, status_WH_dict = status_WH_dict):
   if _WH_needed:
@@ -75,7 +79,7 @@ def process_csv_upload(uploaded_file):
 
     if uploaded_file is not None:
         try:
-            df = pd.read_csv(uploaded_file)
+            df = load_file(uploaded_file)
 
             if validate_csv(df):
                 st.success('CSV format is valid!')
