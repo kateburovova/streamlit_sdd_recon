@@ -227,15 +227,42 @@ def get_all_products(store, api_url=cred_api_url, api_key=cred_crm_api_key):
   df_products = pd.DataFrame(all_products)
   return df_products
 
-def get_one_page_of_CRM_orders(api_url=cred_api_url, api_key=cred_crm_api_key, page=1):
+# def get_one_page_of_CRM_orders(api_url=cred_api_url, api_key=cred_crm_api_key, page=1):
+#     """
+#     Fetches orders from CRM.
+#
+#     :param api_url: Base URL for the CRM API.
+#     :param api_key: Your CRM API key.
+#     :param page: Page number for pagination (default is 1).
+#
+#     :return: List of orders or an error message.
+#     """
+#     endpoint = f"{api_url}/api/v5/orders"
+#     params = {
+#         "apiKey": api_key,
+#         "page": page
+#     }
+#
+#     try:
+#         response = requests.get(endpoint, params=params)
+#         response_data = response.json()
+#
+#         if response_data.get("success"):
+#             return response_data.get("orders", [])
+#         else:
+#             return "Error in API response: " + str(response_data.get("errorMsg"))
+#     except Exception as e:
+#         return "Error in making API request: " + str(e)
+
+def get_one_page_of_CRM_orders(api_url, api_key, page=1):
     """
-    Fetches orders from CRM.
+    Fetches orders from CRM and ensures the data is compatible with PyArrow.
 
     :param api_url: Base URL for the CRM API.
     :param api_key: Your CRM API key.
     :param page: Page number for pagination (default is 1).
 
-    :return: List of orders or an error message.
+    :return: DataFrame of orders or an error message.
     """
     endpoint = f"{api_url}/api/v5/orders"
     params = {
@@ -248,11 +275,24 @@ def get_one_page_of_CRM_orders(api_url=cred_api_url, api_key=cred_crm_api_key, p
         response_data = response.json()
 
         if response_data.get("success"):
-            return response_data.get("orders", [])
+            orders = response_data.get("orders", [])
+
+            # Convert the list of orders to a DataFrame
+            df = pd.DataFrame(orders)
+
+            # Normalize columns to consistent data types
+            for col in df.columns:
+                if df[col].apply(lambda x: isinstance(x, list)).any():
+                    # Convert non-list values to empty lists in columns that contain lists
+                    df[col] = df[col].apply(lambda x: x if isinstance(x, list) else [])
+                # Additional normalization can be added here for other data types
+
+            return df
         else:
             return "Error in API response: " + str(response_data.get("errorMsg"))
     except Exception as e:
         return "Error in making API request: " + str(e)
+
 
 def get_page_count(start_date, end_date, api_url=cred_api_url, api_key=cred_crm_api_key):
     """

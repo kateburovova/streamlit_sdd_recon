@@ -74,5 +74,5 @@ page_orders = crm_processing.get_one_page_of_CRM_orders()
 # Check and normalize the 'items' column
 
 # Now try displaying the dataframe
-# st.dataframe(page_orders)
-st.write(len(page_orders))
+st.dataframe(page_orders)
+# st.write(len(page_orders))
