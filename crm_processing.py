@@ -10,6 +10,7 @@ import io
 import pytz
 
 from dicts import shipmentStores
+from dicts import cols_to_drop
 
 cred_api_url = st.secrets['crm']['cred_api_url']
 cred_crm_api_key = st.secrets['crm']['cred_crm_api_key']
@@ -391,3 +392,19 @@ def get_timeframe(start_date, end_date):
     end_date_utc = datetime.combine(end_date, datetime.max.time())
 
     return (start_date_utc, start_date_utc_normal, end_date_utc)
+
+def load_orders(start_date_utc, end_date_utc):
+    df_orders_crm = get_all_orders_from_timesteps(start_date=start_date_utc, end_date=end_date_utc)
+    return df_orders_crm
+
+def get_orders_crm(start_date_utc, end_date_utc, cols_to_drop=cols_to_drop):
+
+  df_orders_crm = load_orders(start_date=start_date_utc, end_date=end_date_utc)
+  df_orders_crm.drop(columns=cols_to_drop, inplace=True)
+  df_orders_crm['store'] = df_orders_crm['shipmentStore'].apply(assign_store)
+
+  df_orders_crm = df_orders_crm[df_orders_crm['store'].notnull()].copy()
+
+  df_orders_SDD = df_orders_crm[df_orders_crm['store']=='SLASHDOTDASH'].copy()
+
+  return df_orders_SDD

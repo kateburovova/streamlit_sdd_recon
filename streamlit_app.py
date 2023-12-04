@@ -18,7 +18,7 @@ st.set_page_config(layout="wide")
 st.markdown("## Звіт для звірки даних обліку Slash Dot Dash")
 
 start_date = st.date_input("Оберіть дату початку періоду", datetime.today())
-st.write("Обрано:", start_date, type(start_date))
+st.write("Обрано:", start_date)
 
 end_date = st.date_input("Оберіть дату кінця періоду", datetime.today())
 st.write("Обрано:", end_date)
@@ -64,5 +64,8 @@ if df_WH is not None:
     df_WH, df_WH_sold_sdd, aggregated_WH_by_day = WH_processing.process_WH_data(_WH_needed, df_WH)
     st.dataframe(df_WH)
 
-st.write(crm_processing.get_timeframe(start_date, end_date))
+start_date_utc, start_date_utc_normal, end_date_utc = crm_processing.get_timeframe(start_date, end_date)
 
+df_orders_SDD = crm_processing.get_orders_crm(start_date_utc=start_date_utc, end_date_utc=end_date_utc)
+
+st.dataframe(df_orders_SDD.tail(5))
