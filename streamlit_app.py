@@ -71,16 +71,18 @@ start_date_utc, start_date_utc_normal, end_date_utc = crm_processing.get_timefra
 
 # pc = crm_processing.get_page_count(start_date_utc, end_date_utc)
 
-tst = crm_processing.get_one_page_of_CRM_orders_new()
+tst = crm_processing.get_one_page_of_CRM_orders()
+
 df_tst = pd.DataFrame(tst)
+df_tst.drop(columns=['items'], inplace=True)
 
 st.write(df_tst.columns)
 st.write(len(df_tst.columns))
 st.dataframe(df_tst)
 
-df_tst_new = crm_processing.convert_to_original_structure(df_tst)
-# st.dataframe(df_tst_new)
-st.write(df_tst_new.columns)
+# df_tst_new = crm_processing.convert_to_original_structure(df_tst)
+# # st.dataframe(df_tst_new)
+# st.write(df_tst_new.columns)
 
 # df_orders_SDD = crm_processing.get_orders_crm(start_date_utc, end_date_utc)
 # st.write(len(df_orders_SDD))
