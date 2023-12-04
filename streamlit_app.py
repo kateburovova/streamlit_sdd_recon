@@ -82,7 +82,7 @@ st.write(test_item)
 
 test_json = crm_processing.string_to_json(test_item)
 
-st.write(test_json.keys)
+st.write(test_json[0].keys)
 st.write(test_json)
 
 # df_orders_SDD['items_json'] = df_orders_SDD['items_as_string'].apply(crm_processing.string_to_json)
