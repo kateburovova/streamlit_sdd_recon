@@ -530,3 +530,19 @@ def get_one_page_of_CRM_orders_new(api_url=cred_api_url, api_key=cred_crm_api_ke
     except Exception as e:
         return "Error in making API request: " + str(e)
 
+
+def convert_to_original_structure(df):
+    for column in df.columns:
+        # Check if the column contains stringified JSON
+        if isinstance(df[column][0], str):
+            try:
+                # Attempt to parse the string as JSON
+                json.loads(df[column][0])
+                is_json = True
+            except ValueError:
+                is_json = False
+
+            if is_json:
+                # Convert all entries in this column from JSON strings to Python objects
+                df[column] = df[column].apply(lambda x: json.loads(x) if x else x)
+    return df
