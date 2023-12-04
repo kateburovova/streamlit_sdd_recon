@@ -78,7 +78,8 @@ df_orders_SDD_paid = crm_processing.get_paid_crm_orders(df_orders_SDD, start_dat
 # mismatches in discounts
 
 # df_discounts_merged_nonzero = recon.get_discounts_mismatch(df_orders_SDD_paid, df_finance_sdd)
-test = recon.get_agg_fin_shipping_data(df_finance_sdd)
+# total_sum_by_number_crm = get_agg_crm_shipping_data(df_orders_SDD_paid)
+test = recon.get_agg_crm_shipping_data(df_orders_SDD_paid)
 st.dataframe(test)
 
 # st.write(df_orders_SDD_paid.iloc[0].to_dict())
