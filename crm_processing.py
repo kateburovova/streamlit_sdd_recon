@@ -550,3 +550,12 @@ def convert_to_original_structure(df):
     df.drop(columns=['items'], inplace=True)
 
     return df
+
+def string_to_json(string_value):
+    try:
+        # Convert the string to JSON
+        return json.loads(string_value)
+    except json.JSONDecodeError as e:
+        # Handle the exception if the string is not valid JSON
+        print(f"Error decoding JSON: {e}")
+        return None
