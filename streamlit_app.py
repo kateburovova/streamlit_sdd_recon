@@ -76,7 +76,7 @@ st.write(len(df_orders_SDD.columns))
 st.write(len(df_orders_SDD))
 st.dataframe(df_orders_SDD)
 
-test_item = df_orders_SDD['item'].iloc[0]
+test_item = df_orders_SDD['items_as_string'].iloc[0]
 
 st.write(test_item)
 
