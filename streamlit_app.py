@@ -71,7 +71,7 @@ start_date_utc, start_date_utc_normal, end_date_utc = crm_processing.get_timefra
 
 # pc = crm_processing.get_page_count(start_date_utc, end_date_utc)
 
-df_orders_SDD = crm_processing.get_orders_crm(start_date_utc, end_date_utc)
+df_orders_SDD = crm_processing.load_orders(start_date_utc, end_date_utc)
 st.write(len(df_orders_SDD.columns))
 st.write(len(df_orders_SDD))
 st.dataframe(df_orders_SDD)
