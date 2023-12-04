@@ -227,42 +227,15 @@ def get_all_products(store, api_url=cred_api_url, api_key=cred_crm_api_key):
   df_products = pd.DataFrame(all_products)
   return df_products
 
-# def get_one_page_of_CRM_orders(api_url=cred_api_url, api_key=cred_crm_api_key, page=1):
-#     """
-#     Fetches orders from CRM.
-#
-#     :param api_url: Base URL for the CRM API.
-#     :param api_key: Your CRM API key.
-#     :param page: Page number for pagination (default is 1).
-#
-#     :return: List of orders or an error message.
-#     """
-#     endpoint = f"{api_url}/api/v5/orders"
-#     params = {
-#         "apiKey": api_key,
-#         "page": page
-#     }
-#
-#     try:
-#         response = requests.get(endpoint, params=params)
-#         response_data = response.json()
-#
-#         if response_data.get("success"):
-#             return response_data.get("orders", [])
-#         else:
-#             return "Error in API response: " + str(response_data.get("errorMsg"))
-#     except Exception as e:
-#         return "Error in making API request: " + str(e)
-
 def get_one_page_of_CRM_orders(api_url=cred_api_url, api_key=cred_crm_api_key, page=1):
     """
-    Fetches orders from CRM and ensures data compatibility with PyArrow for Streamlit.
+    Fetches orders from CRM.
 
     :param api_url: Base URL for the CRM API.
     :param api_key: Your CRM API key.
     :param page: Page number for pagination (default is 1).
 
-    :return: DataFrame of orders or an error message.
+    :return: List of orders or an error message.
     """
     endpoint = f"{api_url}/api/v5/orders"
     params = {
@@ -275,24 +248,51 @@ def get_one_page_of_CRM_orders(api_url=cred_api_url, api_key=cred_crm_api_key, p
         response_data = response.json()
 
         if response_data.get("success"):
-            orders = response_data.get("orders", [])
-
-            # Convert to DataFrame
-            df = pd.DataFrame(orders)
-
-            # Normalize data types
-            for col in df.columns:
-                if df[col].dtype == 'object':
-                    if df[col].apply(lambda x: isinstance(x, list)).any():
-                        df[col] = df[col].apply(lambda x: x if isinstance(x, list) else [])
-                    else:
-                        df[col] = df[col].fillna('')  # Replace None with empty string for non-list columns
-
-            return df
+            return response_data.get("orders", [])
         else:
             return "Error in API response: " + str(response_data.get("errorMsg"))
     except Exception as e:
         return "Error in making API request: " + str(e)
+
+# def get_one_page_of_CRM_orders(api_url=cred_api_url, api_key=cred_crm_api_key, page=1):
+#     """
+#     Fetches orders from CRM and ensures data compatibility with PyArrow for Streamlit.
+#
+#     :param api_url: Base URL for the CRM API.
+#     :param api_key: Your CRM API key.
+#     :param page: Page number for pagination (default is 1).
+#
+#     :return: DataFrame of orders or an error message.
+#     """
+#     endpoint = f"{api_url}/api/v5/orders"
+#     params = {
+#         "apiKey": api_key,
+#         "page": page
+#     }
+#
+#     try:
+#         response = requests.get(endpoint, params=params)
+#         response_data = response.json()
+#
+#         if response_data.get("success"):
+#             orders = response_data.get("orders", [])
+#
+#             # Convert to DataFrame
+#             df = pd.DataFrame(orders)
+#
+#             # Normalize data types
+#             for col in df.columns:
+#                 if df[col].dtype == 'object':
+#                     if df[col].apply(lambda x: isinstance(x, list)).any():
+#                         df[col] = df[col].apply(lambda x: x if isinstance(x, list) else [])
+#                     else:
+#                         df[col] = df[col].fillna('')  # Replace None with empty string for non-list columns
+#
+#             return df
+#         else:
+#             return "Error in API response: " + str(response_data.get("errorMsg"))
+#     except Exception as e:
+#         return "Error in making API request: " + str(e)
 
 
 
