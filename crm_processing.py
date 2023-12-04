@@ -256,7 +256,7 @@ def get_all_products(store, api_url=cred_api_url, api_key=cred_crm_api_key):
 
 def get_one_page_of_CRM_orders(api_url=cred_api_url, api_key=cred_crm_api_key, page=1):
     """
-    Fetches orders from CRM and ensures the data is compatible with PyArrow.
+    Fetches orders from CRM and ensures data compatibility with PyArrow for Streamlit.
 
     :param api_url: Base URL for the CRM API.
     :param api_key: Your CRM API key.
@@ -277,21 +277,24 @@ def get_one_page_of_CRM_orders(api_url=cred_api_url, api_key=cred_crm_api_key, p
         if response_data.get("success"):
             orders = response_data.get("orders", [])
 
-            # Convert the list of orders to a DataFrame
+            # Convert to DataFrame
             df = pd.DataFrame(orders)
 
-            # Normalize columns to consistent data types
+            # Normalize data types
             for col in df.columns:
-                if df[col].apply(lambda x: isinstance(x, list)).any():
-                    # Convert non-list values to empty lists in columns that contain lists
-                    df[col] = df[col].apply(lambda x: x if isinstance(x, list) else [])
-                # Additional normalization can be added here for other data types
+                if df[col].dtype == 'object':
+                    if df[col].apply(lambda x: isinstance(x, list)).any():
+                        df[col] = df[col].apply(lambda x: x if isinstance(x, list) else [])
+                    else:
+                        df[col] = df[col].fillna('')  # Replace None with empty string for non-list columns
 
             return df
         else:
             return "Error in API response: " + str(response_data.get("errorMsg"))
     except Exception as e:
         return "Error in making API request: " + str(e)
+
+
 
 
 def get_page_count(start_date, end_date, api_url=cred_api_url, api_key=cred_crm_api_key):
