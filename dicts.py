@@ -261,15 +261,15 @@ cols_to_drop = ['bonusesCreditTotal',
                 'width',
                 'height',
                 'weight',
-                'patronymic',
-                'additionalPhone',
+                # 'patronymic',
+                # 'additionalPhone',
                 'ready_steady_go',
                 'no_notifications_mode',
                 'shipping_details',
                 'how_to_communicate',
-                'gift_receiving_person',
-                'cards_texts',
-                'deadline_preorder']
+                'gift_receiving_person']
+                # 'cards_texts',
+                # 'deadline_preorder']
 
 shipmentStores = {'000000003':'U8_Odesa',
                   '000000007':'SDD',
