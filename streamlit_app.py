@@ -69,10 +69,8 @@ st.dataframe(df_finance_sdd.tail(5))
 # processing crm orders
 start_date_utc, start_date_utc_normal, end_date_utc = crm_processing.get_timeframe(start_date, end_date)
 
-st.write(start_date_utc, type(start_date_utc))
-st.write(start_date_utc_normal, type(start_date_utc_normal))
-st.write(end_date_utc, type(end_date_utc))
-
+pc = crm_processing.get_page_count(start_date_utc, end_date_utc)
+st.write(pc)
 
 # df_orders_SDD = crm_processing.get_orders_crm(start_date_utc, end_date_utc)
 # st.write(len(df_orders_SDD))
