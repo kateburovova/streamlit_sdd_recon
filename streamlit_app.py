@@ -71,10 +71,7 @@ start_date_utc, start_date_utc_normal, end_date_utc = crm_processing.get_timefra
 
 # pc = crm_processing.get_page_count(start_date_utc, end_date_utc)
 
-tst = crm_processing.get_one_page_of_CRM_orders()
-
-df_tst = pd.DataFrame(tst)
-df_tst.drop(columns=['items'], inplace=True)
+df_tst = crm_processing.get_all_orders_from_timesteps(start_date_utc, end_date_utc)
 
 st.write(df_tst.columns)
 st.write(len(df_tst.columns))

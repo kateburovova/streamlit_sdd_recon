@@ -343,6 +343,8 @@ def get_all_orders_from_timesteps(start_date, end_date, api_url=cred_api_url, ap
             print(f"Error fetching page {page}: {page_orders}")
 
     df_orders = pd.DataFrame(all_orders)
+    df_orders['items_as_string'] = df_orders['items'].apply(lambda x: json.dumps(x))
+    df_orders.drop(columns=['items'], inplace=True)
     custom_fields_df = pd.json_normalize(df_orders['customFields'])
     df_orders = df_orders.join(custom_fields_df)
     df_orders.drop('customFields', axis=1, inplace=True)
