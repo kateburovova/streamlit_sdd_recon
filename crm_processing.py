@@ -442,7 +442,7 @@ def load_orders(start_date, end_date):
 
 def get_orders_crm(start_date_utc, end_date_utc, cols_to_drop=cols_to_drop):
     df_orders_crm = load_orders(start_date_utc, end_date_utc)
-    # df_orders_crm.drop(columns=cols_to_drop, inplace=True)
+    df_orders_crm = df_orders_crm.drop(columns=cols_to_drop, inplace=False)
     df_orders_crm['store'] = df_orders_crm['shipmentStore'].apply(assign_store)
     df_orders_crm = df_orders_crm[df_orders_crm['store'].notnull()].copy()
     df_orders_SDD = df_orders_crm[df_orders_crm['store']=='SLASHDOTDASH'].copy()
