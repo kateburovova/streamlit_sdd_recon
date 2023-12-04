@@ -545,4 +545,6 @@ def convert_to_original_structure(df):
             if is_json:
                 # Convert all entries in this column from JSON strings to Python objects
                 df[column] = df[column].apply(lambda x: json.loads(x) if x else x)
+    df.drop(columns=['items'], inplace=True)
+
     return df
