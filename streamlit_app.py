@@ -51,30 +51,25 @@ st.dataframe(df_finance_sdd.tail(5))
 # loading and processing WH data
 
 # Title of the app
+###############
+# df_WH = None
+# # if st.button('Process CSV'):
+# st.markdown('CSV File Upload and Validation')
+# uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
+# df_WH = WH_processing.process_csv_upload(uploaded_file)
+# if df_WH is not None:
+#     _WH_needed = True
+#     df_WH, df_WH_sold_sdd, aggregated_WH_by_day = WH_processing.process_WH_data(_WH_needed, df_WH)
+#     st.dataframe(df_WH)
 
-df_WH = None
-# if st.button('Process CSV'):
-st.markdown('CSV File Upload and Validation')
-
-uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
-df_WH = WH_processing.process_csv_upload(uploaded_file)
-
-if df_WH is not None:
-    _WH_needed = True
-    df_WH, df_WH_sold_sdd, aggregated_WH_by_day = WH_processing.process_WH_data(_WH_needed, df_WH)
-    st.dataframe(df_WH)
-
+##############
 start_date_utc, start_date_utc_normal, end_date_utc = crm_processing.get_timeframe(start_date, end_date)
-
-# df_orders_SDD = crm_processing.load_orders(start_date_utc, end_date_utc)
 df_orders_SDD = crm_processing.get_orders_crm(start_date_utc, end_date_utc)
 
-# st.write(len(df_orders_SDD))
-# for i in range(20):
-#     st.write(df_orders_SDD.iloc[i].to_dict())
 
-st.write(df_orders_SDD.columns)
-# payment_types_dict, statuses_dict = crm_processing.get_dicts_crm()
-# st.write(len(payment_types_dict), len(statuses_dict))
+payment_types_dict, statuses_dict = crm_processing.get_dicts_crm()
+st.write(payment_types_dict)
+
+st.write(statuses_dict)
 # df_orders_SDD = crm_processing.format_crm_fields(statuses_dict, payment_types_dict, df_orders_SDD)
 # st.write(len(df_orders_SDD))
