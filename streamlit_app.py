@@ -69,21 +69,27 @@ st.dataframe(df_finance_sdd.tail(5))
 # processing crm orders
 start_date_utc, start_date_utc_normal, end_date_utc = crm_processing.get_timeframe(start_date, end_date)
 
+df_orders_SDD = crm_processing.get_orders_crm(start_date_utc=start_date_utc, end_date_utc=end_date_utc)
+
+st.write(df_orders_SDD.sample(1).to_dict())
 # pc = crm_processing.get_page_count(start_date_utc, end_date_utc)
+#
+# df_orders_SDD = crm_processing.load_orders(start_date_utc, end_date_utc)
+# st.write(len(df_orders_SDD.columns))
+# st.write(len(df_orders_SDD))
+# st.dataframe(df_orders_SDD)
+#
+# test_item = df_orders_SDD['items_as_string'].iloc[0]
+#
+# st.write(test_item)
+#
+# test_json = crm_processing.string_to_json(test_item)
+#
+# st.write(test_json[0].keys)
+# st.write(test_json)
 
-df_orders_SDD = crm_processing.load_orders(start_date_utc, end_date_utc)
-st.write(len(df_orders_SDD.columns))
-st.write(len(df_orders_SDD))
-st.dataframe(df_orders_SDD)
 
-test_item = df_orders_SDD['items_as_string'].iloc[0]
 
-st.write(test_item)
-
-test_json = crm_processing.string_to_json(test_item)
-
-st.write(test_json[0].keys)
-st.write(test_json)
 
 # df_orders_SDD['items_json'] = df_orders_SDD['items_as_string'].apply(crm_processing.string_to_json)
 # st.dataframe(df_orders_SDD)
