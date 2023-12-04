@@ -84,18 +84,20 @@ st.dataframe(df_orders_SDD)
 
 df_orders_SDD_paid = crm_processing.get_paid_crm_orders(df_orders_SDD, start_date_utc_normal, end_date_utc)
 
+df_discounts_merged_nonzero = recon.get_discounts_mismatch(df_orders_SDD_paid, df_finance_sdd)
+st.dataframe(df_discounts_merged_nonzero)
 # df_orders_SDD_paid.drop(columns=['items'], inplace=True)
 # st.write('get_paid_crm_orders done')
 #
 # st.dataframe(df_orders_SDD_paid)
 
-total_sum_by_number_fin = recon.get_agg_fin_shipping_data(df_finance_sdd)
-st.dataframe(total_sum_by_number_fin)
-st.write(len(total_sum_by_number_fin))
-# total_sum_by_number_crm = recon.get_agg_crm_shipping_data(df_orders_SDD_paid)
-total_sum_by_number_crm = df_orders_SDD_paid.groupby('clean_order_number')['discountTotal'].sum().reset_index()
-st.dataframe(total_sum_by_number_crm)
-st.write(len(total_sum_by_number_crm))
+# total_sum_by_number_fin = recon.get_agg_fin_shipping_data(df_finance_sdd)
+# st.dataframe(total_sum_by_number_fin)
+# st.write(len(total_sum_by_number_fin))
+# # total_sum_by_number_crm = recon.get_agg_crm_shipping_data(df_orders_SDD_paid)
+# total_sum_by_number_crm = df_orders_SDD_paid.groupby('clean_order_number')['discountTotal'].sum().reset_index()
+# st.dataframe(total_sum_by_number_crm)
+# st.write(len(total_sum_by_number_crm))
 
 # df_discounts_merged_nonzero = recon.get_discounts_mismatch(df_orders_SDD_paid, df_finance_sdd)
 st.write('get_discounts_mismatch done')
