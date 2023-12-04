@@ -11,6 +11,7 @@ import pytz
 
 from dicts import shipmentStores
 from dicts import cols_to_drop
+from dicts import status_WH_dict
 
 cred_api_url = st.secrets['crm']['cred_api_url']
 cred_crm_api_key = st.secrets['crm']['cred_crm_api_key']
@@ -478,3 +479,13 @@ def format_crm_fields(statuses_dict, payment_types_dict, df_orders_SDD):
         False)
 
     return df_orders_SDD
+
+def get_dicts_crm(status_WH_dict = status_WH_dict):
+    payment_types_dict = get_payment_types_dict()
+    statuses_dict = get_order_statuses_dict()
+    for key in statuses_dict.keys():
+        if status_WH_dict.get(key, False):
+            statuses_dict[key]["status_WH_state"] = status_WH_dict[key].get("status_WH_state", False)
+
+    return payment_types_dict, statuses_dict
+
