@@ -56,4 +56,38 @@ def get_discounts_mismatch(df_orders_SDD_paid, df_finance_sdd):
 
     return df_discounts_merged_nonzero
 
+def get_agg_crm_shipping_advances(df_orders_SDD_paid):
+    df_NP_paid_to_us_crm = df_orders_SDD_paid[df_orders_SDD_paid['delivery_cost_paid_to_us'] != 0].copy()
+    aggregated_df = df_NP_paid_to_us_crm.groupby('payment_date').agg({
+        'delivery_cost_paid_to_us': 'sum',
+        'clean_order_number': 'count',
+        'clean_order_number': lambda x: list(x)
+    }).reset_index()
+
+    # Rename the column for clarity
+    aggregated_df = aggregated_df.rename(columns={'payment_date': 'Дата',
+                                                  'clean_order_number': 'Номери за crm',
+                                                  'delivery_cost_paid_to_us': 'Cумарно отримано оплат доставки за crm'})
+    return aggregated_df
+
+def get_agg_fin_shipping_advances(df_finance_sdd):
+    filtered_df_fin_NP = df_finance_sdd[
+        (df_finance_sdd['Расход или доход'] == 'минус') &
+        (df_finance_sdd['Сумма (только цифры с разделителем - точкой)'] < 0) &
+        (df_finance_sdd['Статья затрат'] == 'перевозки: НП отправки покупателям за наш счет')
+        ]
+    filtered_df_fin_NP
+
+    aggregated_df_fin = filtered_df_fin_NP.groupby('date').agg({
+        'Сумма (только цифры с разделителем - точкой)': 'sum',
+        'clean_order_number': 'count',
+        'clean_order_number': lambda x: list(x)
+    }).reset_index()
+
+    aggregated_df_fin = aggregated_df_fin.rename(columns={'date': 'Дата',
+                                                'clean_order_number': 'Номери за Finance',
+                                                'Сумма (только цифры с разделителем - точкой)': 'Cумарно отримано оплат доставки за Finance'})
+
+    return aggregated_df_fin
+
 

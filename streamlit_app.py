@@ -79,7 +79,7 @@ df_orders_SDD_paid = crm_processing.get_paid_crm_orders(df_orders_SDD, start_dat
 
 df_discounts_merged_nonzero = recon.get_discounts_mismatch(df_orders_SDD_paid, df_finance_sdd)
 
-
+st.dataframe(df_discounts_merged_nonzero)
 
 # st.write(df_orders_SDD_paid.iloc[0].to_dict())
 # df_orders_SDD = crm_processing.format_crm_fields(statuses_dict, payment_types_dict, df_orders_SDD)
