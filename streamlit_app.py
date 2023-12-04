@@ -71,7 +71,7 @@ start_date_utc, start_date_utc_normal, end_date_utc = crm_processing.get_timefra
 
 # pc = crm_processing.get_page_count(start_date_utc, end_date_utc)
 
-tst = crm_processing.get_one_page_of_CRM_orders(cred_api_url, cred_crm_api_key)
+tst = crm_processing.get_one_page_of_CRM_orders_new()
 df_tst = pd.DataFrame(tst)
 
 st.write(df_tst.columns)

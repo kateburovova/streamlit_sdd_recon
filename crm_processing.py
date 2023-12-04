@@ -489,3 +489,44 @@ def get_dicts_crm(status_WH_dict = status_WH_dict):
 
     return payment_types_dict, statuses_dict
 
+
+def flatten_dict(d, parent_key='', sep='_'):
+    items = []
+    for k, v in d.items():
+        new_key = f'{parent_key}{sep}{k}' if parent_key else k
+        if isinstance(v, dict):
+            items.extend(flatten_dict(v, new_key, sep=sep).items())
+        else:
+            items.append((new_key, v))
+    return dict(items)
+
+def get_one_page_of_CRM_orders_new(api_url=cred_api_url, api_key=cred_crm_api_key, page=1):
+    endpoint = f"{api_url}/api/v5/orders"
+    params = {
+        "apiKey": api_key,
+        "page": page
+    }
+
+    try:
+        response = requests.get(endpoint, params=params)
+        response_data = response.json()
+
+        if response_data.get("success"):
+            orders = response_data.get("orders", [])
+            processed_orders = []
+
+            for order in orders:
+                # Flatten nested dictionaries
+                flattened_order = flatten_dict(order)
+                # Convert lists to string
+                for key, value in flattened_order.items():
+                    if isinstance(value, list):
+                        flattened_order[key] = json.dumps(value)
+                processed_orders.append(flattened_order)
+
+            return processed_orders
+        else:
+            return "Error in API response: " + str(response_data.get("errorMsg"))
+    except Exception as e:
+        return "Error in making API request: " + str(e)
+
