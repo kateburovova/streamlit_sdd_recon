@@ -70,7 +70,7 @@ df_orders_SDD = crm_processing.load_orders(start_date_utc, end_date_utc)
 # df_orders_SDD = crm_processing.get_orders_crm(start_date_utc, end_date_utc)
 
 st.write(len(df_orders_SDD))
-for i in range(len(df_orders_SDD)):
+for i in range(20):
     st.write(df_orders_SDD.iloc[i].to_dict())
 # payment_types_dict, statuses_dict = crm_processing.get_dicts_crm()
 # st.write(len(payment_types_dict), len(statuses_dict))
