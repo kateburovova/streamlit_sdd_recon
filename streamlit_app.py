@@ -86,8 +86,8 @@ st.write(end_date_utc, type(end_date_utc))
 
 # df_discounts_merged_nonzero = recon.get_discounts_mismatch(df_orders_SDD_paid, df_finance_sdd)
 # total_sum_by_number_crm = get_agg_crm_shipping_data(df_orders_SDD_paid)
-test = recon.get_agg_crm_shipping_data(df_orders_SDD_paid)
-st.dataframe(test)
+# test = recon.get_agg_crm_shipping_data(df_orders_SDD_paid)
+# st.dataframe(test)
 
 # st.write(df_orders_SDD_paid.iloc[0].to_dict())
 # df_orders_SDD = crm_processing.format_crm_fields(statuses_dict, payment_types_dict, df_orders_SDD)
