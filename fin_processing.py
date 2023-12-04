@@ -64,7 +64,7 @@ def format_fin_data(df):
   df['Сумма'] = pd.to_numeric(df['Сумма (только цифры с разделителем - точкой)'], errors='coerce')
 
   # clean dates
-  df['datetime'] = pd.to_datetime(df['дата'], format='%d.%m.%y')
+  df['datetime'] = pd.to_datetime(df['дата'], format='mixed', dayfirst=True)
   df['date'] = df['datetime'].dt.date
 
   # cast sums to numeric
