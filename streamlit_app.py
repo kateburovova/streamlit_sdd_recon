@@ -76,6 +76,7 @@ df_tst = pd.DataFrame(tst)
 
 st.write(df_tst.columns)
 st.write(len(df_tst.columns))
+st.dataframe(df_tst)
 
 
 # df_orders_SDD = crm_processing.get_orders_crm(start_date_utc, end_date_utc)
