@@ -454,30 +454,30 @@ def get_paid_crm_orders(df_orders_SDD, start_date_utc_normal, end_date_utc):
     return df_orders_SDD_paid
 
 def format_crm_fields(statuses_dict, payment_types_dict, df_orders_SDD):
-  df_orders_SDD['payment_status'] = df_orders_SDD['payments'].apply(extract_payment_status)
-  df_orders_SDD['payment_type_code'] = df_orders_SDD['payments'].apply(extract_payment_type)
-  df_orders_SDD['payment_datetime'] = df_orders_SDD['payments'].apply(extract_payment_datetime)
-  df_orders_SDD['payment_datetime'] = pd.to_datetime(df_orders_SDD['payment_datetime'])
-  df_orders_SDD['payment_date'] = df_orders_SDD['payment_datetime'].dt.date
-  df_orders_SDD['payment_type_name_dict'] = df_orders_SDD['payment_type_code'].apply(lambda x: payment_types_dict.get(x, None))
-  df_orders_SDD['payment_type_name'] = df_orders_SDD['payment_type_name_dict'].apply(lambda x: None if x is None else x.get('name', None))
-  df_orders_SDD['status_name'] = df_orders_SDD['status'].apply(lambda x: statuses_dict[x].get('name', None))
-  df_orders_SDD['status_WH'] = df_orders_SDD['status'].apply(lambda x: statuses_dict[x].get('status_WH_state', None))
-  df_orders_SDD['discountTotal'] = df_orders_SDD.apply(sum_discounts, axis=1)
-  df_orders_SDD['price_before_discount_total'] = df_orders_SDD.apply(sum_total_items_price_before_discount, axis=1)
-  df_orders_SDD['displayNames'] = df_orders_SDD.apply(lambda row: extract_display_names(row), axis=1)
-  df_orders_SDD['clean_order_number'] = df_orders_SDD['number'].str.extract(r'(\d+)')
-  df_orders_SDD['delivery_cost_paid_to_us'] = df_orders_SDD['delivery'].apply(extract_delivery_cost)
-  df_orders_SDD['delivery_cost_NP_calc'] = df_orders_SDD['delivery'].apply(extract_delivery_netCost)
-  df_orders_SDD.reset_index(inplace=True, drop=True)
-  df_orders_SDD['payment_coment'] = df_orders_SDD['payments'].apply(extract_payment_comment)
-  df_orders_SDD['processed_by_checkbox'] = np.where(
+    df_orders_SDD['payment_status'] = df_orders_SDD['payments'].apply(extract_payment_status)
+    df_orders_SDD['payment_type_code'] = df_orders_SDD['payments'].apply(extract_payment_type)
+    df_orders_SDD['payment_datetime'] = df_orders_SDD['payments'].apply(extract_payment_datetime)
+    df_orders_SDD['payment_datetime'] = pd.to_datetime(df_orders_SDD['payment_datetime'])
+    df_orders_SDD['payment_date'] = df_orders_SDD['payment_datetime'].dt.date
+    df_orders_SDD['payment_type_name_dict'] = df_orders_SDD['payment_type_code'].apply(lambda x: payment_types_dict.get(x, None))
+    df_orders_SDD['payment_type_name'] = df_orders_SDD['payment_type_name_dict'].apply(lambda x: None if x is None else x.get('name', None))
+    df_orders_SDD['status_name'] = df_orders_SDD['status'].apply(lambda x: statuses_dict[x].get('name', None))
+    df_orders_SDD['status_WH'] = df_orders_SDD['status'].apply(lambda x: statuses_dict[x].get('status_WH_state', None))
+    df_orders_SDD['discountTotal'] = df_orders_SDD.apply(sum_discounts, axis=1)
+    df_orders_SDD['price_before_discount_total'] = df_orders_SDD.apply(sum_total_items_price_before_discount, axis=1)
+    df_orders_SDD['displayNames'] = df_orders_SDD.apply(lambda row: extract_display_names(row), axis=1)
+    df_orders_SDD['clean_order_number'] = df_orders_SDD['number'].str.extract(r'(\d+)')
+    df_orders_SDD['delivery_cost_paid_to_us'] = df_orders_SDD['delivery'].apply(extract_delivery_cost)
+    df_orders_SDD['delivery_cost_NP_calc'] = df_orders_SDD['delivery'].apply(extract_delivery_netCost)
+    df_orders_SDD.reset_index(inplace=True, drop=True)
+    df_orders_SDD['payment_coment'] = df_orders_SDD['payments'].apply(extract_payment_comment)
+    df_orders_SDD['processed_by_checkbox'] = np.where(
     df_orders_SDD['payment_coment'].str.contains('https://check.checkbox.ua'),
     True,
     False)
-  df_orders_SDD['return_status_by_checkbox'] = np.where(
-    df_orders_SDD['payment_coment'].str.contains('возврата'),
-    True,
-    False)
+    df_orders_SDD['return_status_by_checkbox'] = np.where(
+        df_orders_SDD['payment_coment'].str.contains('возврата'),
+        True,
+        False)
 
-  return df_orders_SDD
+    return df_orders_SDD
