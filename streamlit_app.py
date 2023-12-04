@@ -74,12 +74,14 @@ payment_types_dict, statuses_dict = crm_processing.get_dicts_crm()
 
 df_orders_SDD = crm_processing.format_crm_fields(statuses_dict, payment_types_dict, df_orders_SDD)
 st.write('format_crm_fields done')
+st.dataframe(df_orders_SDD)
+
 df_orders_SDD_paid = crm_processing.get_paid_crm_orders(df_orders_SDD, start_date_utc_normal, end_date_utc)
 
-df_orders_SDD_paid.drop(columns=['items'], inplace=True)
-st.write('get_paid_crm_orders done')
-
-st.dataframe(df_orders_SDD_paid)
+# df_orders_SDD_paid.drop(columns=['items'], inplace=True)
+# st.write('get_paid_crm_orders done')
+#
+# st.dataframe(df_orders_SDD_paid)
 
 total_sum_by_number_fin = recon.get_agg_fin_shipping_data(df_finance_sdd)
 st.dataframe(total_sum_by_number_fin)
