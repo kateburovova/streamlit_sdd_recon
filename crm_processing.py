@@ -441,21 +441,17 @@ def load_orders(start_date, end_date):
     return df_orders_crm
 
 def get_orders_crm(start_date_utc, end_date_utc, cols_to_drop=cols_to_drop):
+    df_orders_crm = load_orders(start_date_utc, end_date_utc)
+    # df_orders_crm.drop(columns=cols_to_drop, inplace=True)
+    df_orders_crm['store'] = df_orders_crm['shipmentStore'].apply(assign_store)
+    df_orders_crm = df_orders_crm[df_orders_crm['store'].notnull()].copy()
+    df_orders_SDD = df_orders_crm[df_orders_crm['store']=='SLASHDOTDASH'].copy()
 
-  df_orders_crm = load_orders(start_date=start_date_utc, end_date=end_date_utc)
-  # df_orders_crm.drop(columns=cols_to_drop, inplace=True)
-  df_orders_crm['store'] = df_orders_crm['shipmentStore'].apply(assign_store)
-
-  df_orders_crm = df_orders_crm[df_orders_crm['store'].notnull()].copy()
-
-  df_orders_SDD = df_orders_crm[df_orders_crm['store']=='SLASHDOTDASH'].copy()
-
-  return df_orders_SDD
+    return df_orders_SDD
 
 def get_paid_crm_orders(df_orders_SDD, start_date_utc_normal, end_date_utc):
-  df_orders_SDD_paid = df_orders_SDD[~df_orders_SDD['payment_datetime'].isna() & (df_orders_SDD['payment_datetime'] >= start_date_utc_normal) & (df_orders_SDD['payment_datetime'] <= end_date_utc)].copy()
-
-  return df_orders_SDD_paid
+    df_orders_SDD_paid = df_orders_SDD[~df_orders_SDD['payment_datetime'].isna() & (df_orders_SDD['payment_datetime'] >= start_date_utc_normal) & (df_orders_SDD['payment_datetime'] <= end_date_utc)].copy()
+    return df_orders_SDD_paid
 
 def format_crm_fields(statuses_dict, payment_types_dict, df_orders_SDD):
   df_orders_SDD['payment_status'] = df_orders_SDD['payments'].apply(extract_payment_status)
