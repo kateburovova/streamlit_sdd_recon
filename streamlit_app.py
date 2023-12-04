@@ -69,5 +69,13 @@ start_date_utc, start_date_utc_normal, end_date_utc = crm_processing.get_timefra
 # df_orders_SDD = crm_processing.get_orders_crm(start_date_utc=start_date_utc, end_date_utc=end_date_utc)
 # num = crm_processing.get_page_count(start_date_utc, end_date_utc)
 page_orders = crm_processing.get_one_page_of_CRM_orders()
+
+page_orders = pd.DataFrame(page_orders)
+
+# Check and normalize the 'items' column
+if 'items' in page_orders.columns:
+    page_orders['items'] = page_orders['items'].apply(lambda x: x if isinstance(x, list) else [])
+
+# Now try displaying the dataframe
 st.dataframe(page_orders)
 # st.write(num)
