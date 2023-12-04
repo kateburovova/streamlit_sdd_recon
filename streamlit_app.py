@@ -75,7 +75,7 @@ payment_types_dict, statuses_dict = crm_processing.get_dicts_crm()
 df_orders_SDD['items_as_string'] = df_orders_SDD['items'].apply(lambda x: str(x))
 df_orders_SDD.drop(columns=['items'], inplace=True)
 
-df_orders_SDD = crm_processing.format_crm_fields(statuses_dict, payment_types_dict, df_orders_SDD)
+# df_orders_SDD = crm_processing.format_crm_fields(statuses_dict, payment_types_dict, df_orders_SDD)
 st.write('format_crm_fields done')
 st.dataframe(df_orders_SDD)
 
