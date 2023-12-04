@@ -18,7 +18,7 @@ st.set_page_config(layout="wide")
 st.markdown("## Звіт для звірки даних обліку Slash Dot Dash")
 
 start_date = st.date_input("Оберіть дату початку періоду", datetime.today())
-st.write("Обрано:", start_date)
+st.write("Обрано:", start_date, type(start_date))
 
 end_date = st.date_input("Оберіть дату кінця періоду", datetime.today())
 st.write("Обрано:", end_date)
