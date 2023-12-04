@@ -457,7 +457,7 @@ def format_crm_fields(statuses_dict, payment_types_dict, df_orders_SDD):
     df_orders_SDD['payment_status'] = df_orders_SDD['payments'].apply(extract_payment_status)
     df_orders_SDD['payment_type_code'] = df_orders_SDD['payments'].apply(extract_payment_type)
     df_orders_SDD['payment_datetime'] = df_orders_SDD['payments'].apply(extract_payment_datetime)
-    df_orders_SDD['payment_datetime'] = pd.to_datetime(df_orders_SDD['payment_datetime'], )
+    df_orders_SDD['payment_datetime'] = pd.to_datetime(df_orders_SDD['payment_datetime'], format='%Y-%m-%d %H:%M:%S')
     df_orders_SDD['payment_date'] = df_orders_SDD['payment_datetime'].dt.date
     df_orders_SDD['payment_type_name_dict'] = df_orders_SDD['payment_type_code'].apply(lambda x: payment_types_dict.get(x, None))
     df_orders_SDD['payment_type_name'] = df_orders_SDD['payment_type_name_dict'].apply(lambda x: None if x is None else x.get('name', None))
