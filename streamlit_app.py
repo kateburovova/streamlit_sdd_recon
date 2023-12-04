@@ -76,7 +76,7 @@ st.write(len(df_orders_SDD.columns))
 st.write(len(df_orders_SDD))
 st.dataframe(df_orders_SDD)
 
-st.table(df_orders_SDD['slug'].valu_counts())
+st.table(df_orders_SDD['slug'].value_counts())
 
 # df_orders_SDD['items_json'] = df_orders_SDD['items_as_string'].apply(crm_processing.string_to_json)
 # st.dataframe(df_orders_SDD)
