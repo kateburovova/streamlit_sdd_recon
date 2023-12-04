@@ -56,10 +56,9 @@ def get_discounts_mismatch(df_orders_SDD_paid, df_finance_sdd):
         np.nan,
         df_discounts_merged['discountTotal'] - df_discounts_merged['Сумма'])
     df_discounts_merged_clean=df_discounts_merged[~df_discounts_merged['diff'].isna()].copy()
-    # df_discounts_merged_nonzero = df_discounts_merged_clean[df_discounts_merged_clean['diff']!=0]
+    df_discounts_merged_nonzero = df_discounts_merged_clean[df_discounts_merged_clean['diff']!=0]
 
-    # return df_discounts_merged_nonzero
-    return df_discounts_merged_clean
+    return df_discounts_merged_nonzero
 
 def get_agg_crm_shipping_advances(df_orders_SDD_paid):
     df_NP_paid_to_us_crm = df_orders_SDD_paid[df_orders_SDD_paid['delivery_cost_paid_to_us'] != 0].copy()
