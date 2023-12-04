@@ -78,9 +78,13 @@ df_orders_SDD_paid = crm_processing.get_paid_crm_orders(df_orders_SDD, start_dat
 
 st.write('get_paid_crm_orders done')
 
-df_discounts_merged_nonzero = recon.get_discounts_mismatch(df_orders_SDD_paid, df_finance_sdd)
+total_sum_by_number_fin = recon.get_agg_fin_shipping_data(df_finance_sdd)
+st.dataframe(total_sum_by_number_fin)
+total_sum_by_number_crm = recon.get_agg_crm_shipping_data(df_orders_SDD_paid)
+st.dataframe(total_sum_by_number_crm)
+
+# df_discounts_merged_nonzero = recon.get_discounts_mismatch(df_orders_SDD_paid, df_finance_sdd)
 st.write('get_discounts_mismatch done')
-st.dataframe(df_discounts_merged_nonzero)
 
 # st.write(df_orders_SDD.sample(1).to_dict())
 # pc = crm_processing.get_page_count(start_date_utc, end_date_utc)
