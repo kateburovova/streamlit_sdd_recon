@@ -52,9 +52,10 @@ def get_discounts_mismatch(df_orders_SDD_paid, df_finance_sdd):
         np.nan,
         df_discounts_merged['discountTotal'] - df_discounts_merged['Сумма'])
     df_discounts_merged_clean=df_discounts_merged[~df_discounts_merged['diff'].isna()].copy()
-    df_discounts_merged_nonzero = df_discounts_merged_clean[df_discounts_merged_clean['diff']!=0]
+    # df_discounts_merged_nonzero = df_discounts_merged_clean[df_discounts_merged_clean['diff']!=0]
 
-    return df_discounts_merged_nonzero
+    # return df_discounts_merged_nonzero
+    return df_discounts_merged_clean
 
 def get_agg_crm_shipping_advances(df_orders_SDD_paid):
     df_NP_paid_to_us_crm = df_orders_SDD_paid[df_orders_SDD_paid['delivery_cost_paid_to_us'] != 0].copy()
@@ -89,5 +90,67 @@ def get_agg_fin_shipping_advances(df_finance_sdd):
                                                 'Сумма (только цифры с разделителем - точкой)': 'Cумарно отримано оплат доставки за Finance'})
 
     return aggregated_df_fin
+
+def get_delivery_payed_mismatch(df_finance_sdd, df_orders_SDD_paid):
+    aggregated_df_fin = get_agg_fin_shipping_advances(df_finance_sdd)
+    aggregated_df = get_agg_crm_shipping_advances(df_orders_SDD_paid)
+
+    df_delivery_payed_mismatch = aggregated_df.merge(aggregated_df_fin, how='outer', on='Дата')
+    df_delivery_payed_mismatch['Cумарно отримано оплат доставки за crm'] = df_delivery_payed_mismatch['Cумарно отримано оплат доставки за crm'].fillna(0.0)
+    df_delivery_payed_mismatch['Cумарно отримано оплат доставки за Finance'] = df_delivery_payed_mismatch['Cумарно отримано оплат доставки за Finance'].fillna(0.0)
+    df_delivery_payed_mismatch['Номери за crm'] = df_delivery_payed_mismatch['Номери за crm'].apply(lambda x: x if isinstance(x, list) else [])
+    df_delivery_payed_mismatch['Номери за Finance'] = df_delivery_payed_mismatch['Номери за Finance'].apply(lambda x: x if isinstance(x, list) else [])
+
+    df_delivery_payed_mismatch['Розбіжність (crm мінус Finance)'] = df_delivery_payed_mismatch['Cумарно отримано оплат доставки за crm']+df_delivery_payed_mismatch['Cумарно отримано оплат доставки за Finance']
+
+    df_delivery_payed_mismatch['Розбіжність по номерах (є в crm, немає в Finance)'] = \
+        df_delivery_payed_mismatch.apply(lambda row:
+                                     list(set(row['Номери за crm']) - set(row['Номери за Finance'])),
+                                     axis=1)
+
+    df_delivery_payed_mismatch['Розбіжність по номерах (є в Finance, немає в crm)'] = \
+        df_delivery_payed_mismatch.apply(lambda row:
+                                      list(set(row['Номери за Finance'])-set(row['Номери за crm'])),
+                                      axis=1)
+    df_delivery_payed_mismatch.sort_values(by='Дата', inplace=True)
+
+    return df_delivery_payed_mismatch
+
+def get_daily_agg_fin_dfs(df_finance_sdd):
+    filtered_dfs = {}
+
+    aggregated_filtered_dfs = {}
+
+    for kassa in list(df_finance_sdd['Какая касса?'].value_counts().index):
+        if kassa!='':
+            df = df_finance_sdd[(df_finance_sdd['Какая касса?']==kassa)\
+                          &((df_finance_sdd['Статья затрат']=='')\
+                            |(df_finance_sdd['Статья затрат']=='скидка')\
+                            |(df_finance_sdd['Статья затрат']=='перевозки: НП отправки покупателям за наш счет'))].copy()
+            filtered_dfs[kassa] = df
+
+            total_sum_name = f'Загалом по {kassa} в Fin'
+            order_list_name = f'Список замовлень по {kassa} в Fin'
+            order_count_name = f'Кількість замовлень по {kassa} в Fin'
+
+            aggregated_filtered_df = df.groupby('date').agg({
+                'formatted_sum': 'sum',
+                'clean_order_number': lambda x: list(x)}).reset_index()
+
+
+            aggregated_filtered_df = aggregated_filtered_df.sort_values(by='date')
+
+            aggregated_filtered_df.rename(columns={'clean_order_number':order_list_name,
+                                            'formatted_sum': total_sum_name,
+                                            'date': 'Дата оплати'}, inplace=True)
+            aggregated_filtered_df[order_list_name] = aggregated_filtered_df[order_list_name].apply(lambda x: list(set(x)))
+            aggregated_filtered_df[order_count_name] = aggregated_filtered_df[order_list_name].apply(lambda x: len(x))
+
+            aggregated_filtered_dfs[kassa] = aggregated_filtered_df
+
+    return aggregated_filtered_dfs
+
+
+
 
 
