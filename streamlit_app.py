@@ -69,6 +69,7 @@ st.dataframe(df_finance_sdd.tail(5))
 # processing crm orders
 start_date_utc, start_date_utc_normal, end_date_utc = crm_processing.get_timeframe(start_date, end_date)
 df_orders_SDD = crm_processing.get_orders_crm(start_date_utc, end_date_utc)
+st.write(len(df_orders_SDD))
 payment_types_dict, statuses_dict = crm_processing.get_dicts_crm()
 df_orders_SDD = crm_processing.format_crm_fields(statuses_dict, payment_types_dict, df_orders_SDD)
 df_orders_SDD_paid = crm_processing.get_paid_crm_orders(df_orders_SDD, start_date_utc_normal, end_date_utc)

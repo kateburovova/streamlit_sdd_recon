@@ -332,22 +332,22 @@ def get_page_count(start_date, end_date, api_url=cred_api_url, api_key=cred_crm_
 
 
 def get_all_orders_from_timesteps(start_date, end_date, api_url=cred_api_url, api_key=cred_crm_api_key):
-  total_pages = get_page_count(start_date=start_date, end_date=end_date)
-  all_orders = []
+    total_pages = get_page_count(start_date=start_date, end_date=end_date)
+    all_orders = []
 
-  for page in range(1, total_pages + 1):
-    page_orders = get_one_page_of_CRM_orders()
-    if isinstance(page_orders, list):
-        all_orders.extend(page_orders)
-    else:
-        print(f"Error fetching page {page}: {page_orders}")
+    for page in range(1, total_pages + 1):
+        page_orders = get_one_page_of_CRM_orders()
+        if isinstance(page_orders, list):
+            all_orders.extend(page_orders)
+        else:
+            print(f"Error fetching page {page}: {page_orders}")
 
-  df_orders = pd.DataFrame(all_orders)
-  custom_fields_df = pd.json_normalize(df_orders['customFields'])
-  df_orders = df_orders.join(custom_fields_df)
-  df_orders.drop('customFields', axis=1, inplace=True)
+    df_orders = pd.DataFrame(all_orders)
+    custom_fields_df = pd.json_normalize(df_orders['customFields'])
+    df_orders = df_orders.join(custom_fields_df)
+    df_orders.drop('customFields', axis=1, inplace=True)
 
-  return df_orders
+    return df_orders
 
 def assign_store(shipment_store_code, shipmentStores=shipmentStores):
     store_name = shipmentStores.get(shipment_store_code, "")
