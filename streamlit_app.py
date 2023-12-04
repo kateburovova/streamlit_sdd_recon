@@ -11,6 +11,7 @@ from datetime import datetime, timedelta
 import fin_processing
 import WH_processing
 import crm_processing
+import recon
 
 st.set_page_config(layout="wide")
 
@@ -50,8 +51,7 @@ st.dataframe(df_finance_sdd.tail(5))
 
 # loading and processing WH data
 
-# Title of the app
-###############
+# # processing WH data
 # df_WH = None
 # # if st.button('Process CSV'):
 # st.markdown('CSV File Upload and Validation')
@@ -61,18 +61,26 @@ st.dataframe(df_finance_sdd.tail(5))
 #     _WH_needed = True
 #     df_WH, df_WH_sold_sdd, aggregated_WH_by_day = WH_processing.process_WH_data(_WH_needed, df_WH)
 #     st.dataframe(df_WH)
+# # processing WH data
 
-##############
+
+#############
 
 # processing crm orders
 start_date_utc, start_date_utc_normal, end_date_utc = crm_processing.get_timeframe(start_date, end_date)
 df_orders_SDD = crm_processing.get_orders_crm(start_date_utc, end_date_utc)
 payment_types_dict, statuses_dict = crm_processing.get_dicts_crm()
 df_orders_SDD = crm_processing.format_crm_fields(statuses_dict, payment_types_dict, df_orders_SDD)
-
 df_orders_SDD_paid = crm_processing.get_paid_crm_orders(df_orders_SDD, start_date_utc_normal, end_date_utc)
+# processing crm orders
 
-st.write(df_orders_SDD_paid.iloc[0].to_dict())
 
+# mismatches in discounts
+
+df_discounts_merged_nonzero = recon.get_discounts_mismatch(df_orders_SDD_paid, df_finance_sdd)
+
+
+
+# st.write(df_orders_SDD_paid.iloc[0].to_dict())
 # df_orders_SDD = crm_processing.format_crm_fields(statuses_dict, payment_types_dict, df_orders_SDD)
 # st.write(len(df_orders_SDD))
