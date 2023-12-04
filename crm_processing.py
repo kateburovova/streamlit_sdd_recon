@@ -254,7 +254,7 @@ def get_all_products(store, api_url=cred_api_url, api_key=cred_crm_api_key):
 #     except Exception as e:
 #         return "Error in making API request: " + str(e)
 
-def get_one_page_of_CRM_orders(api_url, api_key, page=1):
+def get_one_page_of_CRM_orders(api_url=cred_api_url, api_key=cred_crm_api_key, page=1):
     """
     Fetches orders from CRM and ensures the data is compatible with PyArrow.
 
