@@ -67,6 +67,7 @@ if df_WH is not None:
 start_date_utc, start_date_utc_normal, end_date_utc = crm_processing.get_timeframe(start_date, end_date)
 
 # df_orders_SDD = crm_processing.get_orders_crm(start_date_utc=start_date_utc, end_date_utc=end_date_utc)
-num = crm_processing.get_page_count(start_date_utc, end_date_utc)
-# st.dataframe(df_orders_SDD.tail(5))
-st.write(num)
+# num = crm_processing.get_page_count(start_date_utc, end_date_utc)
+page_orders = crm_processing.get_one_page_of_CRM_orders()
+st.dataframe(page_orders)
+# st.write(num)
