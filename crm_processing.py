@@ -381,3 +381,11 @@ def sum_total_items_price_before_discount(row):
             total_discount += item.get('initialPrice', 0)
 
     return total_discount
+
+def get_timeframe(start_date, end_date):
+
+  start_date_utc = datetime.combine(start_date, datetime.min.time())-timedelta(days=30)
+  start_date_utc_normal = datetime.combine(start_date, datetime.min.time())
+  end_date_utc = datetime.combine(end_date, datetime.max.time())
+
+  return (start_date_utc, start_date_utc_normal, end_date_utc)

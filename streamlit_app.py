@@ -10,6 +10,7 @@ import pytz
 from datetime import datetime, timedelta
 import fin_processing
 import WH_processing
+import crm_processing
 
 st.set_page_config(layout="wide")
 
@@ -63,4 +64,5 @@ if df_WH is not None:
     df_WH, df_WH_sold_sdd, aggregated_WH_by_day = WH_processing.process_WH_data(_WH_needed, df_WH)
     st.dataframe(df_WH)
 
+st.write(crm_processing.get_timeframe(start_date, end_date))
 
