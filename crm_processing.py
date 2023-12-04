@@ -393,8 +393,8 @@ def get_timeframe(start_date, end_date):
 
     return (start_date_utc, start_date_utc_normal, end_date_utc)
 
-def load_orders(start_date_utc, end_date_utc):
-    df_orders_crm = get_all_orders_from_timesteps(start_date=start_date_utc, end_date=end_date_utc)
+def load_orders(start_date, end_date):
+    df_orders_crm = get_all_orders_from_timesteps(start_date=start_date, end_date=end_date)
     return df_orders_crm
 
 def get_orders_crm(start_date_utc, end_date_utc, cols_to_drop=cols_to_drop):
