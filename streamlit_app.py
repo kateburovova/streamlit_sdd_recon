@@ -70,5 +70,5 @@ df_orders_SDD = crm_processing.get_orders_crm(start_date_utc=start_date_utc, end
 st.write(len(df_orders_SDD))
 payment_types_dict, statuses_dict = crm_processing.get_dicts_crm()
 st.write(len(payment_types_dict), len(statuses_dict))
-df_orders_SDD = crm_processing.format_crm_fields()
+df_orders_SDD = crm_processing.format_crm_fields(statuses_dict, payment_types_dict, df_orders_SDD)
 st.write(len(df_orders_SDD))

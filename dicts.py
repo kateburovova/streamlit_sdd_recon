@@ -384,3 +384,4 @@ new_order_with_WH = ['Дата оплати',
               'Кількість замовлень по Касса USD в Fin']
 
 cols_to_show_status_comparison = ['Код CRM', 'Проведен?', 'status_WH', 'Сумма', 'totalSumm', 'clean_order_number', 'Номер', 'Розбіжність по сумі', 'Розбіжність по статусу','status_name', 'Статус заказа']
+
