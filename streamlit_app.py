@@ -70,8 +70,19 @@ st.dataframe(df_finance_sdd.tail(5))
 start_date_utc, start_date_utc_normal, end_date_utc = crm_processing.get_timeframe(start_date, end_date)
 
 df_orders_SDD = crm_processing.get_orders_crm(start_date_utc=start_date_utc, end_date_utc=end_date_utc)
+payment_types_dict, statuses_dict = crm_processing.get_dicts_crm()
 
-st.write(df_orders_SDD.sample(1).to_dict())
+df_orders_SDD = crm_processing.format_crm_fields(statuses_dict, payment_types_dict, df_orders_SDD)
+st.write('format_crm_fields done')
+df_orders_SDD_paid = crm_processing.get_paid_crm_orders(df_orders_SDD, start_date_utc_normal, end_date_utc)
+
+st.write('get_paid_crm_orders done')
+
+df_discounts_merged_nonzero = recon.get_discounts_mismatch(df_orders_SDD_paid, df_finance_sdd)
+st.write('get_discounts_mismatch done')
+st.dataframe(df_discounts_merged_nonzero)
+
+# st.write(df_orders_SDD.sample(1).to_dict())
 # pc = crm_processing.get_page_count(start_date_utc, end_date_utc)
 #
 # df_orders_SDD = crm_processing.load_orders(start_date_utc, end_date_utc)
