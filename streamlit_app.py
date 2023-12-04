@@ -66,8 +66,8 @@ if df_WH is not None:
 
 start_date_utc, start_date_utc_normal, end_date_utc = crm_processing.get_timeframe(start_date, end_date)
 
-# df_orders_SDD = crm_processing.load_orders(start_date_utc, end_date_utc)
-df_orders_SDD = crm_processing.get_orders_crm(start_date_utc, end_date_utc)
+df_orders_SDD = crm_processing.load_orders(start_date_utc, end_date_utc)
+# df_orders_SDD = crm_processing.get_orders_crm(start_date_utc, end_date_utc)
 
 st.write(len(df_orders_SDD))
 for i in range(len(df_orders_SDD)):
