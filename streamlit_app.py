@@ -73,7 +73,7 @@ df_WH = None
 aggregated_WH_by_day = None
 
 
-if WH_options=='Так':
+if selected_WH_option=='Так':
     st.markdown('Завантажте CSV File з документами реалізації за обраний період.')
     uploaded_file = st.file_uploader("Оберіть CSV файл", type="csv")
     df_WH = WH_processing.process_csv_upload(uploaded_file)
