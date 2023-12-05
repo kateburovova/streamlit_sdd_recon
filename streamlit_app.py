@@ -91,7 +91,7 @@ df_delivery_payed_mismatch = recon.get_delivery_payed_mismatch(df_finance_sdd, d
 st.dataframe(df_delivery_payed_mismatch)
 
 st.write('************************************')
-filtered_df = recon.get_timed_daily_data(df_orders_SDD_paid, start_date_utc_normal, end_date_utc)
+filtered_df = recon.get_timed_daily_data(df_finance_sdd, df_orders_SDD_paid, start_date_utc_normal, end_date_utc)
 filtered_df = recon.format_daily_timed_data(filtered_df)
 # final_df = recon.get_final_daily_comparison(filtered_df, _WH_needed)
 # st.dataframe(final_df)

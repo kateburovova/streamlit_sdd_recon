@@ -184,12 +184,12 @@ def merge_dataframes_on_date(dict1, dict2):
 
     return merged_df
 
-def get_timed_daily_data(df_orders_SDD_paid, crm_start_date, crm_end_date):
+def get_timed_daily_data(df_finance_sdd, df_orders_SDD_paid, crm_start_date, crm_end_date):
     aggregated_crm_dfs = filter_and_aggregate_by_payment_by_date(df = df_orders_SDD_paid,
-                                                               payment_field_name = 'payment_type_name',
-                                                               date_field_name = 'payment_date',
+                                                               payment_field_name ='payment_type_name',
+                                                               date_field_name ='payment_date',
                                                                sum_field_name='totalSumm',
-                                                               order_field_name = 'clean_order_number')
+                                                               order_field_name ='clean_order_number')
 
     aggregated_filtered_dfs = get_daily_agg_fin_dfs(df_finance_sdd)
     merged_df = merge_dataframes_on_date(aggregated_crm_dfs, aggregated_filtered_dfs)
