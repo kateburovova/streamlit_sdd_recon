@@ -134,15 +134,16 @@ st.markdown('Дані виводяться з обраний період. '
             'Код CRM - це не назва замовлення, а айді з посилання (в системі обліку товару також присутнє це поле). ')
 df_by_number_final = recon.compare_crm_and_WH_data(df_orders_SDD_paid, df_WH_sold_sdd, _WH_needed)
 
-df_by_number_final.rename(columns={'Проведен?':'Проведено в CRM',
-                                   'status_WH':'Проведено в базі',
-                                   'Сумма':'Сума в базі',
-                                   'totalSumm':'Сума в CRM',
-                                   'clean_order_number':'Номер замовлення в CRM',
-                                   'Номер':'Номер документу реалізації в базі',
-                                   'Номер':'Номер документу реалізації в базі',
-                                   'status_name':'Статус в CRM',
-                                   'status_name':'Статус в базі'}, inplace=True)
+if _WH_needed:
+    df_by_number_final.rename(columns={'Проведен?':'Проведено в CRM',
+                                       'status_WH':'Проведено в базі',
+                                       'Сумма':'Сума в базі',
+                                       'totalSumm':'Сума в CRM',
+                                       'clean_order_number':'Номер замовлення в CRM',
+                                       'Номер':'Номер документу реалізації в базі',
+                                       'Номер':'Номер документу реалізації в базі',
+                                       'status_name':'Статус в CRM',
+                                       'status_name':'Статус в базі'}, inplace=True)
 
-st.dataframe(df_by_number_final)
+    st.dataframe(df_by_number_final)
 
