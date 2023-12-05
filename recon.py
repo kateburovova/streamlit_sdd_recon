@@ -1,4 +1,5 @@
 import pandas as pd
+import streamlit as st
 import requests
 import time
 import json
@@ -296,4 +297,4 @@ def compare_crm_and_WH_data(df_orders_SDD_paid, df_WH_sold_sdd, _WH_needed, cols
         return df_by_number_final
 
     else:
-        print("Дані для порівняння з обліком залишків не надані, порівняти неможливо.")
+        st.write("Дані для порівняння з обліком залишків не надані, порівняти неможливо.")
