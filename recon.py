@@ -9,6 +9,7 @@ import gspread
 
 from dicts import new_order_with_WH
 from dicts import new_order_no_WH
+from dicts import cols_to_show_status_comparison
 
 
 def filter_and_aggregate_by_payment_by_date(df, payment_field_name, date_field_name, sum_field_name, order_field_name):
@@ -277,3 +278,22 @@ def get_final_daily_comparison(filtered_df, _WH_needed, aggregated_WH_by_day, ne
         df = final_df[new_order_no_WH].copy()
 
     return df
+
+
+def compare_crm_and_WH_data(df_orders_SDD_paid, df_WH_sold_sdd, _WH_needed, cols_to_show_status_comparison=cols_to_show_status_comparison):
+    if _WH_needed:
+        df_orders_SDD_paid.rename(columns = {'id':'Код CRM'}, inplace=True)
+        df_WH_sold_sdd['Код CRM'] = pd.to_numeric(df_WH_sold_sdd['Код CRM'])
+        df_orders_SDD_paid['Код CRM'] = pd.to_numeric(df_orders_SDD_paid['Код CRM'])
+        df_paid_sdd=df_orders_SDD_paid[~df_orders_SDD_paid['payment_date'].isna()].copy()
+        df_by_number = df_WH_sold_sdd.merge(df_paid_sdd, how='outer', on = 'Код CRM')
+        df_by_number[['Сумма', 'totalSumm']] = df_by_number[['Сумма', 'totalSumm']].fillna(0)
+        df_by_number["Сумма"] = pd.to_numeric(df_by_number["Сумма"])
+        df_by_number["Розбіжність по сумі"] = df_by_number["Сумма"] - df_by_number['totalSumm'] + df_by_number['delivery_cost_paid_to_us']
+        df_by_number['Розбіжність по статусу'] = (df_by_number['Проведен?'] != df_by_number['status_WH']) | df_by_number['Проведен?'].isna() | df_by_number['status_WH'].isna()
+        df_by_number_final = df_by_number[cols_to_show_status_comparison][(df_by_number['Розбіжність по статусу']==True)|(df_by_number['Розбіжність по сумі']!=0)]
+
+        return df_by_number_final
+
+    else:
+        print("Дані для порівняння з обліком залишків не надані, порівняти неможливо.")

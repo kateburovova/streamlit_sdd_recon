@@ -35,7 +35,7 @@ st.markdown('Дані з CRM отримуються за датою створе
             'Тож для того, щоб не пропустити старі замовлення оплачені в поточному періоді, до дати початку додається 1 місяць (наприклад, обравши 1 листопада до 30 листопада, система завантажить дані з 1 жовтня.) '
             'Це означає, що дуже старі замовлення (старші за місяць до початку періода) не будуть включені в звіт, навіть якщо вони оплачені зараз. '
             'За замовчанням дати звіту встановлюються з сьогодні по сьогодні, тож якщо вам потрібні інші дати, не чекайте, поки дані завантажаться за замовчанням і відразу обирайте правильний період. '
-            'Завантаження всіх даних і їх обробка триватиме в середньому 5-7 хвилин (прям пропорційно залежить від довжини обраного періоду). ')
+            'Завантаження всіх даних і їх обробка триватиме в середньому 10 хвилин (прям пропорційно залежить від довжини обраного періоду). ')
 
 # loading creds from secrets
 _WH_needed = False
@@ -66,6 +66,7 @@ df_finance_sdd = fin_processing.format_fin_data(df_finance_sdd_loaded)
 
 # processing WH data
 df_WH = None
+aggregated_WH_by_day = None
 # if st.button('Process CSV'):
 st.markdown('CSV File Upload and Validation')
 uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
@@ -73,7 +74,7 @@ df_WH = WH_processing.process_csv_upload(uploaded_file)
 if df_WH is not None:
     _WH_needed = True
     df_WH, df_WH_sold_sdd, aggregated_WH_by_day = WH_processing.process_WH_data(_WH_needed, df_WH)
-    st.dataframe(df_WH)
+    # st.dataframe(df_WH)
 # processing WH data
 
 
@@ -122,11 +123,11 @@ final_df = recon.get_final_daily_comparison(filtered_df, _WH_needed, aggregated_
 st.dataframe(final_df)
 
 
-# st.write('************************************')
-# st.markdown('### Порівняння знижок за даними CRM та даними Finance')
-# st.markdown('Дані виводяться з обраний період.')
-# df_by_number_final = recon.compare_crm_and_WH_data(cols_to_show_status_comparison, df_orders_SDD_paid, df_WH_sold_sdd, _WH_needed)
-# st.dataframe(df_by_number_final)
+st.write('************************************')
+st.markdown('### Порівняння статусів і сум замовлень за даними CRM та системи обліку товарів')
+st.markdown('Дані виводяться з обраний період.')
+df_by_number_final = recon.compare_crm_and_WH_data(df_orders_SDD_paid, df_WH_sold_sdd, _WH_needed)
+st.dataframe(df_by_number_final)
 
 
 # df_orders_SDD_paid.drop(columns=['items'], inplace=True)
