@@ -23,7 +23,8 @@ st.markdown("### Як працює цей звіт?")
 st.markdown('Цей звіт автоматично отримує актуальні дані з Finance та CRM при кожному провантаженні. '
             'Дані з системи обліку товарів можна завантажити опціонально. '
             'Якщо ви підвантажите файл з даними з системи обліку товарів, до звіта додасться таблиця з порівнянням суми і статуса замовлення в CRM та системі обліку товарів. '
-            'Також до порівняння денних кас буде додано колонки з даними з системи обліку товарів.')
+            'Також до порівняння денних кас буде додано колонки з даними з системи обліку товарів. '
+            'Звіт обробляється покроково, тобто спочатку вам потрібно обрати потрібні дати, а потім - чи завантажувати файл обліку товарів. ')
 
 start_date = st.date_input("Оберіть дату початку періоду", datetime.today())
 st.write("Обрано:", start_date)
@@ -65,18 +66,24 @@ df_finance_sdd = fin_processing.format_fin_data(df_finance_sdd_loaded)
 # loading and processing WH data
 
 # processing WH data
+
+WH_options = ['Так', 'Ні']
+selected_WH_option = st.radio('Оберіть, будь ласка, чи завантажувати файл з обліку товарів :', WH_options, key='wh_option')
 df_WH = None
 aggregated_WH_by_day = None
-# if st.button('Process CSV'):
-st.markdown('CSV File Upload and Validation')
-uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
-df_WH = WH_processing.process_csv_upload(uploaded_file)
-if df_WH is not None:
-    _WH_needed = True
-    df_WH, df_WH_sold_sdd, aggregated_WH_by_day = WH_processing.process_WH_data(_WH_needed, df_WH)
-    # st.dataframe(df_WH)
-# processing WH data
 
+
+if WH_options=='Так':
+    st.markdown('Завантажте CSV File з документами реалізації за обраний період.')
+    uploaded_file = st.file_uploader("Оберіть CSV файл", type="csv")
+    df_WH = WH_processing.process_csv_upload(uploaded_file)
+    if df_WH is not None:
+        _WH_needed = True
+        df_WH, df_WH_sold_sdd, aggregated_WH_by_day = WH_processing.process_WH_data(_WH_needed, df_WH)
+else:
+    st.write("Не завантажуємо файл 👌")
+
+st.write('Починається завантаження і обробка даних, зачекайте ⏳')
 
 #############
 
@@ -90,7 +97,6 @@ df_orders_SDD = crm_processing.format_crm_fields(statuses_dict, payment_types_di
 df_orders_SDD['items_as_string'] = df_orders_SDD['items'].apply(lambda x: str(x))
 df_orders_SDD.drop(columns=['items'], inplace=True)
 
-st.write('format_crm_fields done')
 st.dataframe(df_orders_SDD)
 df_orders_SDD_paid = crm_processing.get_paid_crm_orders(df_orders_SDD, start_date_utc_normal, end_date_utc)
 
@@ -124,8 +130,7 @@ st.dataframe(final_df)
 st.write('************************************')
 st.markdown('### Порівняння статусів і сум замовлень за даними CRM та системи обліку товарів')
 st.markdown('Дані виводяться з обраний період. '
-            'Код CRM - це не назва замовлення, а айді з посилання (в системі обліку товару також присутнє це поле). '
-            '')
+            'Код CRM - це не назва замовлення, а айді з посилання (в системі обліку товару також присутнє це поле). ')
 df_by_number_final = recon.compare_crm_and_WH_data(df_orders_SDD_paid, df_WH_sold_sdd, _WH_needed)
 
 df_by_number_final.rename(columns={'Проведен?':'Проведено в CRM',
