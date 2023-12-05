@@ -35,7 +35,7 @@ st.markdown('Дані з CRM отримуються за датою створе
             'Тож для того, щоб не пропустити старі замовлення оплачені в поточному періоді, до дати початку додається 1 місяць (наприклад, обравши 1 листопада до 30 листопада, система завантажить дані з 1 жовтня.) '
             'Це означає, що дуже старі замовлення (старші за місяць до початку періода) не будуть включені в звіт, навіть якщо вони оплачені зараз. '
             'За замовчанням дати звіту встановлюються з сьогодні по сьогодні, тож якщо вам потрібні інші дати, не чекайте, поки дані завантажаться за замовчанням і відразу обирайте правильний період. '
-            'Завантаження всіх даних і їх обробка триватиме в середньому 10 хвилин (прям пропорційно залежить від довжини обраного періоду). ')
+            'Завантаження всіх даних і їх обробка триватиме в середньому 5-7 хвилин (прям пропорційно залежить від довжини обраного періоду). ')
 
 # loading creds from secrets
 _WH_needed = False
@@ -86,9 +86,6 @@ start_date_utc, start_date_utc_normal, end_date_utc = crm_processing.get_timefra
 df_orders_SDD = crm_processing.get_orders_crm(start_date_utc=start_date_utc, end_date_utc=end_date_utc)
 payment_types_dict, statuses_dict = crm_processing.get_dicts_crm()
 
-# df_orders_SDD['items_as_string'] = df_orders_SDD['items'].apply(lambda x: str(x))
-# df_orders_SDD.drop(columns=['items'], inplace=True)
-
 df_orders_SDD = crm_processing.format_crm_fields(statuses_dict, payment_types_dict, df_orders_SDD)
 df_orders_SDD['items_as_string'] = df_orders_SDD['items'].apply(lambda x: str(x))
 df_orders_SDD.drop(columns=['items'], inplace=True)
@@ -103,6 +100,10 @@ st.markdown('### Порівняння знижок за даними CRM та д
 st.markdown('Дані виводяться з обраний період.')
 df_discounts_merged_nonzero = recon.get_discounts_mismatch(df_orders_SDD_paid, df_finance_sdd)
 st.dataframe(df_discounts_merged_nonzero)
+
+st.write('************************************')
+st.markdown('### Порівняння сум, оплачених нам за доставку за даними CRM та даними Finance')
+st.markdown('Дані виводяться з обраний період. Якщо ви не вказали номер замовлення в рядку Finance, сума знижки не потрапить в цей звіт. ')
 df_delivery_payed_mismatch = recon.get_delivery_payed_mismatch(df_finance_sdd, df_orders_SDD_paid)
 df_delivery_payed_mismatch.rename(columns={'clean_order_number':'Номер замовлення',
                                            'discountTotal':'Знижка в CRM',
@@ -110,83 +111,32 @@ df_delivery_payed_mismatch.rename(columns={'clean_order_number':'Номер за
                                            'diff':'Розбіжність'}, inplace=True)
 st.dataframe(df_delivery_payed_mismatch)
 
-st.write('************************************')
-st.markdown('### Порівняння сум, оплачених нам за доставку за даними CRM та даними Finance')
-st.markdown('Дані виводяться з обраний період. Якщо ви не вказали номер замовлення в рядку Finance, сума знижки не потрапить в цей звіт. ')
-filtered_df = recon.get_timed_daily_data(df_finance_sdd, df_orders_SDD_paid, start_date_utc_normal, end_date_utc)
-filtered_df = recon.format_daily_timed_data(filtered_df)
 
 st.write('************************************')
-st.markdown('### Порівняння знижок за даними CRM та даними Finance')
-st.markdown('Дані виводяться з обраний період.')
+st.markdown('### Порівняння сум та замовлень за день за даними CRM, Finance та обліку товарів (коли підвантажений)')
+st.markdown('Дані виводяться з обраний період. Якщо ви бачите порожній бабл на місці номера замовлення, значить, якесь замовлення є, але без вказання номера. ')
+filtered_df = recon.get_timed_daily_data(df_finance_sdd, df_orders_SDD_paid, start_date_utc_normal, end_date_utc)
+filtered_df = recon.format_daily_timed_data(filtered_df)
 final_df = recon.get_final_daily_comparison(filtered_df, _WH_needed, aggregated_WH_by_day)
 st.dataframe(final_df)
 
 
 st.write('************************************')
 st.markdown('### Порівняння статусів і сум замовлень за даними CRM та системи обліку товарів')
-st.markdown('Дані виводяться з обраний період.')
+st.markdown('Дані виводяться з обраний період. '
+            'Код CRM - це не назва замовлення, а айді з посилання (в системі обліку товару також присутнє це поле). '
+            '')
 df_by_number_final = recon.compare_crm_and_WH_data(df_orders_SDD_paid, df_WH_sold_sdd, _WH_needed)
+
+df_by_number_final.rename(columns={'Проведен?':'Проведено в CRM',
+                                   'status_WH':'Проведено в базі',
+                                   'Сумма':'Сума в базі',
+                                   'totalSumm':'Сума в CRM',
+                                   'clean_order_number':'Номер замовлення в CRM',
+                                   'Номер':'Номер документу реалізації в базі',
+                                   'Номер':'Номер документу реалізації в базі',
+                                   'status_name':'Статус в CRM',
+                                   'status_name':'Статус в базі'}, inplace=True)
+
 st.dataframe(df_by_number_final)
 
-
-# df_orders_SDD_paid.drop(columns=['items'], inplace=True)
-# st.write('get_paid_crm_orders done')
-#
-# st.dataframe(df_orders_SDD_paid)
-
-# total_sum_by_number_fin = recon.get_agg_fin_shipping_data(df_finance_sdd)
-# st.dataframe(total_sum_by_number_fin)
-# st.write(len(total_sum_by_number_fin))
-# # total_sum_by_number_crm = recon.get_agg_crm_shipping_data(df_orders_SDD_paid)
-# total_sum_by_number_crm = df_orders_SDD_paid.groupby('clean_order_number')['discountTotal'].sum().reset_index()
-# st.dataframe(total_sum_by_number_crm)
-# st.write(len(total_sum_by_number_crm))
-
-# df_discounts_merged_nonzero = recon.get_discounts_mismatch(df_orders_SDD_paid, df_finance_sdd)
-st.write('get_discounts_mismatch done')
-
-# st.write(df_orders_SDD.sample(1).to_dict())
-# pc = crm_processing.get_page_count(start_date_utc, end_date_utc)
-#
-# df_orders_SDD = crm_processing.load_orders(start_date_utc, end_date_utc)
-# st.write(len(df_orders_SDD.columns))
-# st.write(len(df_orders_SDD))
-# st.dataframe(df_orders_SDD)
-#
-# test_item = df_orders_SDD['items_as_string'].iloc[0]
-#
-# st.write(test_item)
-#
-# test_json = crm_processing.string_to_json(test_item)
-#
-# st.write(test_json[0].keys)
-# st.write(test_json)
-
-
-
-
-# df_orders_SDD['items_json'] = df_orders_SDD['items_as_string'].apply(crm_processing.string_to_json)
-# st.dataframe(df_orders_SDD)
-# df_tst_new = crm_processing.convert_to_original_structure(df_tst)
-# # st.dataframe(df_tst_new)
-# st.write(df_tst_new.columns)
-
-# df_orders_SDD = crm_processing.get_orders_crm(start_date_utc, end_date_utc)
-# st.write(len(df_orders_SDD))
-# payment_types_dict, statuses_dict = crm_processing.get_dicts_crm()
-# df_orders_SDD = crm_processing.format_crm_fields(statuses_dict, payment_types_dict, df_orders_SDD)
-# df_orders_SDD_paid = crm_processing.get_paid_crm_orders(df_orders_SDD, start_date_utc_normal, end_date_utc)
-# processing crm orders
-
-
-# mismatches in discounts
-
-# df_discounts_merged_nonzero = recon.get_discounts_mismatch(df_orders_SDD_paid, df_finance_sdd)
-# total_sum_by_number_crm = get_agg_crm_shipping_data(df_orders_SDD_paid)
-# test = recon.get_agg_crm_shipping_data(df_orders_SDD_paid)
-# st.dataframe(test)
-
-# st.write(df_orders_SDD_paid.iloc[0].to_dict())
-# df_orders_SDD = crm_processing.format_crm_fields(statuses_dict, payment_types_dict, df_orders_SDD)
-# st.write(len(df_orders_SDD))
