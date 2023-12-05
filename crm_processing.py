@@ -416,7 +416,7 @@ def sum_discounts(row):
 
     if row['items'] and isinstance(row['items'], list):
         for item in row['items']:
-            total_discount += item.get('discountTotal', 0)
+            total_discount += item.get('discountTotal', 0)*item.get('quantity', 0)
 
     return total_discount
 
