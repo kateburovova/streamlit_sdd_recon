@@ -16,7 +16,18 @@ import recon
 st.set_page_config(layout="wide")
 
 
-st.markdown("## Звіт для звірки даних обліку Slash Dot Dash")
+st.markdown("# Звіт для звірки даних обліку SDD")
+
+st.markdown("### Як працює цей звіт?")
+
+st.markdown('Цей звіт автоматично отримує актуальні дані з Finance та CRM при кожному провантаженні. '
+            'Дані з системи обліку товарів можна завантажити опціонально.'
+            'Якщо ви підвантажите файл з даними з системи обліку товарів, до звіта додасться таблиця з порівнянням суми і статуса замовлення в CRM та системі обліку товарів.'
+            'Також до порівняння денних кас буде додано колонки з даними з системи обліку товарів.')
+
+st.markdown('Дані з CRM отримуються за датою створення замовлення, а не за датою оплати. '
+            'Тож для того, щоб не пропустити старі замовлення оплачені в поточному періоді, до дати початку додається 1 місяць (наприклад, обравши 1 листопада до 30 листопада, система завантажить дані з 1 жовтня.)'
+            'Це означає, що дуже старі замовлення (старші за місяць до початку періода) не будуть включені в звіт, навіть якщо вони оплачені зараз.')
 
 start_date = st.date_input("Оберіть дату початку періоду", datetime.today())
 st.write("Обрано:", start_date)
@@ -93,8 +104,10 @@ st.dataframe(df_delivery_payed_mismatch)
 st.write('************************************')
 filtered_df = recon.get_timed_daily_data(df_finance_sdd, df_orders_SDD_paid, start_date_utc_normal, end_date_utc)
 filtered_df = recon.format_daily_timed_data(filtered_df)
-# final_df = recon.get_final_daily_comparison(filtered_df, _WH_needed)
-# st.dataframe(final_df)
+
+st.write('************************************')
+final_df = recon.get_final_daily_comparison(filtered_df, _WH_needed)
+st.dataframe(final_df)
 
 # df_by_number_final = recon.compare_crm_and_WH_data(cols_to_show_status_comparison, df_orders_SDD_paid, df_WH_sold_sdd, _WH_needed)
 # st.dataframe(df_by_number_final)
