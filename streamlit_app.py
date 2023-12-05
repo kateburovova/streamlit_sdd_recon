@@ -86,6 +86,9 @@ df_orders_SDD_paid = crm_processing.get_paid_crm_orders(df_orders_SDD, start_dat
 
 df_discounts_merged_nonzero = recon.get_discounts_mismatch(df_orders_SDD_paid, df_finance_sdd)
 st.dataframe(df_discounts_merged_nonzero)
+st.write('************************************')
+df_delivery_payed_mismatch = recon.get_delivery_payed_mismatch(df_finance_sdd, df_orders_SDD_paid)
+st.dataframe(df_delivery_payed_mismatch)
 # df_orders_SDD_paid.drop(columns=['items'], inplace=True)
 # st.write('get_paid_crm_orders done')
 #
