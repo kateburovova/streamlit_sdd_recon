@@ -116,10 +116,10 @@ st.write('************************************')
 st.markdown('### Порівняння сум, оплачених нам за доставку за даними CRM та даними Finance')
 st.markdown('Дані виводяться з обраний період. Якщо ви не вказали номер замовлення в рядку Finance, сума знижки не потрапить в цей звіт. ')
 df_delivery_payed_mismatch = recon.get_delivery_payed_mismatch(df_finance_sdd, df_orders_SDD_paid)
-df_delivery_payed_mismatch.rename(columns={'clean_order_number':'Номер замовлення',
-                                           'discountTotal':'Знижка в CRM',
-                                           'Сумма':'Знижка в Finance',
-                                           'diff':'Розбіжність'}, inplace=True)
+# df_delivery_payed_mismatch.rename(columns={'clean_order_number':'Номер замовлення',
+#                                            'discountTotal':'Знижка в CRM',
+#                                            'Сумма':'Знижка в Finance',
+#                                            'diff':'Розбіжність'}, inplace=True)
 st.dataframe(df_delivery_payed_mismatch)
 
 
