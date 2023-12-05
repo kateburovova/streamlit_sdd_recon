@@ -98,7 +98,7 @@ df_orders_SDD = crm_processing.format_crm_fields(statuses_dict, payment_types_di
 df_orders_SDD['items_as_string'] = df_orders_SDD['items'].apply(lambda x: str(x))
 df_orders_SDD.drop(columns=['items'], inplace=True)
 
-st.dataframe(df_orders_SDD)
+# st.dataframe(df_orders_SDD)
 df_orders_SDD_paid = crm_processing.get_paid_crm_orders(df_orders_SDD, start_date_utc_normal, end_date_utc)
 
 

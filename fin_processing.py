@@ -64,7 +64,7 @@ def format_fin_data(df):
   df['Сумма'] = pd.to_numeric(df['Сумма (только цифры с разделителем - точкой)'], errors='coerce')
 
   # clean dates
-  df['datetime'] = pd.to_datetime(df['дата'], format='mixed', dayfirst=True)
+  df['datetime'] = df['дата'].apply(try_parse_date)
   df['date'] = df['datetime'].dt.date
 
   # cast sums to numeric
@@ -72,3 +72,10 @@ def format_fin_data(df):
   df['formatted_sum'] = df.apply(lambda row: row['Сумма (только цифры с разделителем - точкой)']*(-1) if row['Расход или доход']=='минус' else row['Сумма'], axis=1)
 
   return df
+
+def try_parse_date(date_str):
+  try:
+    return pd.to_datetime(date_str, format='%d.%m.%y', errors='raise')
+  except ValueError:
+    # Return None or pd.NaT if the date is incorrectly formatted
+    return pd.NaT
