@@ -106,6 +106,10 @@ st.write('************************************')
 st.markdown('### Порівняння знижок за даними CRM та даними Finance')
 st.markdown('Дані виводяться з обраний період.')
 df_discounts_merged_nonzero = recon.get_discounts_mismatch(df_orders_SDD_paid, df_finance_sdd)
+df_discounts_merged_nonzero.rename(columns={'clean_order_number':'Номер замовлення',
+                                           'discountTotal':'Знижка в CRM',
+                                           'Сумма':'Знижка в Finance',
+                                           'diff':'Розбіжність'}, inplace=True)
 st.dataframe(df_discounts_merged_nonzero)
 
 st.write('************************************')
@@ -140,7 +144,6 @@ if _WH_needed:
                                        'Сумма':'Сума в базі',
                                        'totalSumm':'Сума в CRM',
                                        'clean_order_number':'Номер замовлення в CRM',
-                                       'Номер':'Номер документу реалізації в базі',
                                        'Номер':'Номер документу реалізації в базі',
                                        'status_name':'Статус в CRM',
                                        'Статус':'Статус в базі'}, inplace=True)
