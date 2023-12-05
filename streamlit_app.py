@@ -51,17 +51,17 @@ st.dataframe(df_finance_sdd.tail(5))
 
 # loading and processing WH data
 
-# # processing WH data
-# df_WH = None
-# # if st.button('Process CSV'):
-# st.markdown('CSV File Upload and Validation')
-# uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
-# df_WH = WH_processing.process_csv_upload(uploaded_file)
-# if df_WH is not None:
-#     _WH_needed = True
-#     df_WH, df_WH_sold_sdd, aggregated_WH_by_day = WH_processing.process_WH_data(_WH_needed, df_WH)
-#     st.dataframe(df_WH)
-# # processing WH data
+# processing WH data
+df_WH = None
+# if st.button('Process CSV'):
+st.markdown('CSV File Upload and Validation')
+uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
+df_WH = WH_processing.process_csv_upload(uploaded_file)
+if df_WH is not None:
+    _WH_needed = True
+    df_WH, df_WH_sold_sdd, aggregated_WH_by_day = WH_processing.process_WH_data(_WH_needed, df_WH)
+    st.dataframe(df_WH)
+# processing WH data
 
 
 #############
@@ -89,6 +89,17 @@ st.dataframe(df_discounts_merged_nonzero)
 st.write('************************************')
 df_delivery_payed_mismatch = recon.get_delivery_payed_mismatch(df_finance_sdd, df_orders_SDD_paid)
 st.dataframe(df_delivery_payed_mismatch)
+
+st.write('************************************')
+filtered_df = recon.get_timed_daily_data(df_orders_SDD_paid, start_date_utc_normal, end_date_utc)
+filtered_df = recon.format_daily_timed_data(filtered_df)
+# final_df = recon.get_final_daily_comparison(filtered_df, _WH_needed)
+# st.dataframe(final_df)
+
+# df_by_number_final = recon.compare_crm_and_WH_data(cols_to_show_status_comparison, df_orders_SDD_paid, df_WH_sold_sdd, _WH_needed)
+# st.dataframe(df_by_number_final)
+
+
 # df_orders_SDD_paid.drop(columns=['items'], inplace=True)
 # st.write('get_paid_crm_orders done')
 #
