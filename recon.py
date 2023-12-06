@@ -282,12 +282,17 @@ def get_final_daily_comparison(filtered_df, _WH_needed, aggregated_WH_by_day, ne
         final_df['Замовлення в не обох списках'] = final_df.apply(lambda row: set(row['Cписок по Fin загалом'])^ set(row['Cписок по CRM загалом']), axis=1)
         df = final_df[new_order_with_WH].copy()
 
-    else:
-        final_df = filtered_df.copy()
-        final_df['Замовлення в не обох списках'] = final_df.apply(lambda row: set(row['Cписок по Fin загалом'])^ set(row['Cписок по CRM загалом']), axis=1)
-        df = final_df[new_order_no_WH].copy()
+        return df
 
-    return df
+    else:
+        if len(filtered_df)>0:
+            final_df = filtered_df.copy()
+            final_df['Замовлення в не обох списках'] = final_df.apply(lambda row: set(row['Cписок по Fin загалом'])^ set(row['Cписок по CRM загалом']), axis=1)
+            df = final_df[new_order_no_WH].copy()
+            return df
+        else:
+            st.write("Бракує даних для аналізу 😣")
+
 
 
 def compare_crm_and_WH_data(df_orders_SDD_paid, df_WH_sold_sdd, _WH_needed, cols_to_show_status_comparison=cols_to_show_status_comparison):
