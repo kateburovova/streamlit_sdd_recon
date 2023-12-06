@@ -127,16 +127,18 @@ st.dataframe(df_delivery_payed_mismatch)
 st.write('************************************')
 st.markdown('### Порівняння сум та замовлень за день за даними CRM, Finance та обліку товарів (коли підвантажений)')
 st.markdown('Дані виводяться з обраний період. Якщо ви бачите порожній бабл на місці номера замовлення, значить, якесь замовлення є, але без вказання номера. '
-            'Сума в CRM має дорівнювати суми в Finance, і є більшою за суму в базі на загальну суму компенсованих нам доставок.')
+            'Сума в CRM має дорівнювати суми в Finance, і є більшою за суму в базі на загальну суму компенсованих нам доставок. '
+            'Якщо маєте неправильну суму в Finance, в першу чергу перевірте, чи у вас немає там мінусів без статті затрат - вони обовʼязково формуватимуть помилку. '
+            'Також неправильно проведені доставки (компенсовані нам) обовʼязково створюватимуть розбіжність, якщо вони не додані в CRM через поле Вартість доставки або не проведені мінус мінусом в Finance. ')
 filtered_df = recon.get_timed_daily_data(df_finance_sdd, df_orders_SDD_paid, start_date_utc_normal, end_date_utc)
 filtered_df = recon.format_daily_timed_data(filtered_df)
 final_df = recon.get_final_daily_comparison(filtered_df, _WH_needed, aggregated_WH_by_day)
 st.dataframe(final_df)
 
-
-final_df.rename(columns={'Дата оплати': 'Дата'}, inplace=True)
-all_merged = final_df.merge(df_finance_sdd_dates, how='left', on='Дата')
-st.dataframe(all_merged)
+#
+# final_df.rename(columns={'Дата оплати': 'Дата'}, inplace=True)
+# all_merged = final_df.merge(df_finance_sdd_dates, how='left', on='Дата')
+# st.dataframe(all_merged)
 
 
 
