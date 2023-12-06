@@ -117,7 +117,6 @@ st.write('************************************')
 st.markdown('### Порівняння сум, оплачених нам за доставку за даними CRM та даними Finance')
 st.markdown('Дані виводяться з обраний період. Якщо ви не вказали номер замовлення в рядку Finance, сума знижки не потрапить в цей звіт. ')
 df_finance_sdd_dates = df_finance_sdd[(df_finance_sdd['datetime'] >= start_date_utc_normal) & (df_finance_sdd['datetime'] <= end_date_utc)].copy()
-st.write(len(df_discounts_merged_nonzero))
 
 df_delivery_payed_mismatch = recon.get_delivery_payed_mismatch(df_finance_sdd_dates, df_orders_SDD_paid)
 # df_delivery_payed_mismatch.rename(columns={'clean_order_number':'Номер замовлення',
@@ -142,7 +141,7 @@ st.write('************************************')
 st.markdown('### Порівняння статусів і сум замовлень за даними CRM та системи обліку товарів')
 df_by_number_final = recon.compare_crm_and_WH_data(df_orders_SDD_paid, df_WH_sold_sdd, _WH_needed)
 
-if _WH_needed:
+if _WH_needed and len(df_by_number_final>0):
     st.markdown('Дані виводяться з обраний період. '
                 'Код CRM - це не назва замовлення, а айді з посилання (в системі обліку товару також присутнє це поле). ')
     df_by_number_final.rename(columns={'Проведен?':'Проведено в CRM',

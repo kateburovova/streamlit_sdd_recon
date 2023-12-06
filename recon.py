@@ -242,16 +242,21 @@ def format_daily_timed_data(filtered_df):
     filtered_df[crm_qtty_columns] = filtered_df[crm_qtty_columns].fillna(0)
     filtered_df[fin_qtty_columns] = filtered_df[fin_qtty_columns].fillna(0)
 
-    filtered_df['Cписок по CRM загалом'] = filtered_df.apply(concat_flatten_lists, columns=crm_list_columns, axis=1)
-    filtered_df['Cписок по Fin загалом'] = filtered_df.apply(concat_flatten_lists, columns=fin_list_columns, axis=1)
+    if len(filtered_df)>0:
 
-    filtered_df['Сума по CRM загалом'] = filtered_df[crm_total_columns].sum(axis=1)
-    filtered_df['Сума по Fin загалом'] = filtered_df[fin_total_columns].sum(axis=1)
+        filtered_df['Cписок по CRM загалом'] = filtered_df.apply(concat_flatten_lists, columns=crm_list_columns, axis=1)
+        filtered_df['Cписок по Fin загалом'] = filtered_df.apply(concat_flatten_lists, columns=fin_list_columns, axis=1)
 
-    filtered_df['Кількість по CRM загалом'] = filtered_df['Cписок по CRM загалом'].apply(lambda x: len(x))
-    filtered_df['Кількість по Fin загалом'] = filtered_df['Cписок по Fin загалом'].apply(lambda x: len(x))
+        filtered_df['Сума по CRM загалом'] = filtered_df[crm_total_columns].sum(axis=1)
+        filtered_df['Сума по Fin загалом'] = filtered_df[fin_total_columns].sum(axis=1)
 
-    return filtered_df
+        filtered_df['Кількість по CRM загалом'] = filtered_df['Cписок по CRM загалом'].apply(lambda x: len(x))
+        filtered_df['Кількість по Fin загалом'] = filtered_df['Cписок по Fin загалом'].apply(lambda x: len(x))
+
+        return filtered_df
+
+    else:
+        st.write('Бракує даних для аналізу 🚬')
 
 def concat_flatten_lists(row, columns):
     concatenated_list = []
