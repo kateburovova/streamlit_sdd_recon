@@ -59,6 +59,10 @@ def format_fin_data(df):
   mask = (df[columns_to_check] == '').all(axis=1)
   df = df[~mask].copy()
 
+  # columns_to_check = ["Расход или доход", "Какая касса?", "Статья затрат", "Сумма (только цифры с разделителем - точкой)"]
+  # mask = (df[columns_to_check] == '').all(axis=1)
+
+
   # extract order numbers from the text
   df['clean_order_number'] = df['Номер замовлення'].str.extract(r'(\d+)')
   df['Сумма'] = pd.to_numeric(df['Сумма (только цифры с разделителем - точкой)'], errors='coerce')
