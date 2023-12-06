@@ -278,6 +278,8 @@ def find_symmetric_difference(row):
 
 def get_final_daily_comparison(filtered_df, _WH_needed, aggregated_WH_by_day, new_order_with_WH=new_order_with_WH, new_order_no_WH=new_order_no_WH):
     if _WH_needed:
+        st.write(type(filtered_df))
+        st.write(len(filtered_df))
         if filtered_df is not None:
             final_df = filtered_df.merge(aggregated_WH_by_day, how = 'outer', on = "Дата оплати")
             final_df['Замовлення в не обох списках'] = final_df.apply(lambda row: set(row['Cписок по Fin загалом'])^ set(row['Cписок по CRM загалом']), axis=1)
