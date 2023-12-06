@@ -135,10 +135,10 @@ filtered_df = recon.format_daily_timed_data(filtered_df)
 final_df = recon.get_final_daily_comparison(filtered_df, _WH_needed, aggregated_WH_by_day)
 st.dataframe(final_df)
 
-st.write('************************************')
-final_df_cut = final_df.rename(columns={'Дата оплати': 'Дата'}, inplace=False)
-final_df_cut = final_df_cut[['Дата', 'Cумарно отримано оплат доставки за crm']]
-st.dataframe(final_df_cut)
+# st.write('************************************')
+# final_df_cut = final_df.rename(columns={'Дата оплати': 'Дата'}, inplace=False)
+# final_df_cut = final_df_cut[['Дата', 'Cумарно отримано оплат доставки за crm']]
+# st.dataframe(final_df_cut)
 
 # all_merged = final_df.merge(df_finance_sdd_dates, how='left', on='Дата')
 # st.dataframe(all_merged)
