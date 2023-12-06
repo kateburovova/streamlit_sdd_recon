@@ -117,6 +117,8 @@ st.write('************************************')
 st.markdown('### Порівняння сум, оплачених нам за доставку за даними CRM та даними Finance')
 st.markdown('Дані виводяться з обраний період. Якщо ви не вказали номер замовлення в рядку Finance, сума знижки не потрапить в цей звіт. ')
 df_finance_sdd_dates = df_finance_sdd[(df_finance_sdd['datetime'] >= start_date_utc_normal) & (df_finance_sdd['datetime'] <= end_date_utc)].copy()
+st.write(len(df_discounts_merged_nonzero))
+
 df_delivery_payed_mismatch = recon.get_delivery_payed_mismatch(df_finance_sdd_dates, df_orders_SDD_paid)
 # df_delivery_payed_mismatch.rename(columns={'clean_order_number':'Номер замовлення',
 #                                            'discountTotal':'Знижка в CRM',

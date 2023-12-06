@@ -101,25 +101,29 @@ def get_delivery_payed_mismatch(df_finance_sdd, df_orders_SDD_paid):
     aggregated_df = get_agg_crm_shipping_advances(df_orders_SDD_paid)
 
     df_delivery_payed_mismatch = aggregated_df.merge(aggregated_df_fin, how='outer', on='Дата')
-    df_delivery_payed_mismatch['Cумарно отримано оплат доставки за crm'] = df_delivery_payed_mismatch['Cумарно отримано оплат доставки за crm'].fillna(0.0)
-    df_delivery_payed_mismatch['Cумарно отримано оплат доставки за Finance'] = df_delivery_payed_mismatch['Cумарно отримано оплат доставки за Finance'].fillna(0.0)
-    df_delivery_payed_mismatch['Номери за crm'] = df_delivery_payed_mismatch['Номери за crm'].apply(lambda x: x if isinstance(x, list) else [])
-    df_delivery_payed_mismatch['Номери за Finance'] = df_delivery_payed_mismatch['Номери за Finance'].apply(lambda x: x if isinstance(x, list) else [])
 
-    df_delivery_payed_mismatch['Розбіжність (crm мінус Finance)'] = df_delivery_payed_mismatch['Cумарно отримано оплат доставки за crm']+df_delivery_payed_mismatch['Cумарно отримано оплат доставки за Finance']
+    if len(df_delivery_payed_mismatch)>0:
+        df_delivery_payed_mismatch['Cумарно отримано оплат доставки за crm'] = df_delivery_payed_mismatch['Cумарно отримано оплат доставки за crm'].fillna(0.0)
+        df_delivery_payed_mismatch['Cумарно отримано оплат доставки за Finance'] = df_delivery_payed_mismatch['Cумарно отримано оплат доставки за Finance'].fillna(0.0)
+        df_delivery_payed_mismatch['Номери за crm'] = df_delivery_payed_mismatch['Номери за crm'].apply(lambda x: x if isinstance(x, list) else [])
+        df_delivery_payed_mismatch['Номери за Finance'] = df_delivery_payed_mismatch['Номери за Finance'].apply(lambda x: x if isinstance(x, list) else [])
 
-    df_delivery_payed_mismatch['Розбіжність по номерах (є в crm, немає в Finance)'] = \
-        df_delivery_payed_mismatch.apply(lambda row:
-                                     list(set(row['Номери за crm']) - set(row['Номери за Finance'])),
-                                     axis=1)
+        df_delivery_payed_mismatch['Розбіжність (crm мінус Finance)'] = df_delivery_payed_mismatch['Cумарно отримано оплат доставки за crm']+df_delivery_payed_mismatch['Cумарно отримано оплат доставки за Finance']
 
-    df_delivery_payed_mismatch['Розбіжність по номерах (є в Finance, немає в crm)'] = \
-        df_delivery_payed_mismatch.apply(lambda row:
-                                      list(set(row['Номери за Finance'])-set(row['Номери за crm'])),
-                                      axis=1)
-    df_delivery_payed_mismatch.sort_values(by='Дата', inplace=True)
+        df_delivery_payed_mismatch['Розбіжність по номерах (є в crm, немає в Finance)'] = \
+            df_delivery_payed_mismatch.apply(lambda row:
+                                         list(set(row['Номери за crm']) - set(row['Номери за Finance'])),
+                                         axis=1)
 
-    return df_delivery_payed_mismatch
+        df_delivery_payed_mismatch['Розбіжність по номерах (є в Finance, немає в crm)'] = \
+            df_delivery_payed_mismatch.apply(lambda row:
+                                          list(set(row['Номери за Finance'])-set(row['Номери за crm'])),
+                                          axis=1)
+        df_delivery_payed_mismatch.sort_values(by='Дата', inplace=True)
+
+        return df_delivery_payed_mismatch
+    else:
+        st.write('Бракує даних для аналізу 🙈')
 
 def get_daily_agg_fin_dfs(df_finance_sdd):
     filtered_dfs = {}
