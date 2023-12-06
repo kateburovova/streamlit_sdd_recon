@@ -141,7 +141,7 @@ st.write('************************************')
 st.markdown('### Порівняння статусів і сум замовлень за даними CRM та системи обліку товарів')
 df_by_number_final = recon.compare_crm_and_WH_data(df_orders_SDD_paid, df_WH_sold_sdd, _WH_needed)
 
-if _WH_needed and len(df_by_number_final>0):
+if _WH_needed and (df_by_number_final is not None):
     st.markdown('Дані виводяться з обраний період. '
                 'Код CRM - це не назва замовлення, а айді з посилання (в системі обліку товару також присутнє це поле). ')
     df_by_number_final.rename(columns={'Проведен?':'Проведено в CRM',
