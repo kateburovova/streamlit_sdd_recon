@@ -278,14 +278,17 @@ def find_symmetric_difference(row):
 
 def get_final_daily_comparison(filtered_df, _WH_needed, aggregated_WH_by_day, new_order_with_WH=new_order_with_WH, new_order_no_WH=new_order_no_WH):
     if _WH_needed:
-        final_df = filtered_df.merge(aggregated_WH_by_day, how = 'outer', on = "Дата оплати")
-        final_df['Замовлення в не обох списках'] = final_df.apply(lambda row: set(row['Cписок по Fin загалом'])^ set(row['Cписок по CRM загалом']), axis=1)
-        df = final_df[new_order_with_WH].copy()
+        if filtered_df is not None:
+            final_df = filtered_df.merge(aggregated_WH_by_day, how = 'outer', on = "Дата оплати")
+            final_df['Замовлення в не обох списках'] = final_df.apply(lambda row: set(row['Cписок по Fin загалом'])^ set(row['Cписок по CRM загалом']), axis=1)
+            df = final_df[new_order_with_WH].copy()
 
-        return df
+            return df
+        else:
+            st.write("Бракує даних для аналізу 😣")
 
     else:
-        if len(filtered_df)>0:
+        if filtered_df is not None:
             final_df = filtered_df.copy()
             final_df['Замовлення в не обох списках'] = final_df.apply(lambda row: set(row['Cписок по Fin загалом'])^ set(row['Cписок по CRM загалом']), axis=1)
             df = final_df[new_order_no_WH].copy()
