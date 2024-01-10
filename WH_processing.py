@@ -8,7 +8,7 @@ import numpy as np
 import pytz
 
 from dicts import status_WH_dict
-@st.cache
+# @st.cache
 def load_file(uploaded_file):
     df = pd.read_csv(uploaded_file)
     return df
